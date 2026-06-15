@@ -10,24 +10,7 @@ class UlasanController extends Controller
 {
     public function index()
     {
-        $pendingCounts = [];
-        $kategoriList = [
-            1  => 'Wisata Alam',
-            8  => 'Hiburan Keluarga',
-            15 => 'Penginapan',
-            19 => 'Transportasi',
-            23 => 'Kuliner',
-        ];
-
-        foreach ($kategoriList as $parentId => $label) {
-            $catIds = \App\Models\Category::where('parent_id', $parentId)->pluck('id');
-            $wisataIds = Wisata::whereIn('category_id', $catIds)->pluck('id');
-            $pendingCounts[$parentId] = Ulasan::whereIn('wisata_id', $wisataIds)
-                ->where('status', 'pending')
-                ->count();
-        }
-
-        return view('admin.dashboard', compact('pendingCounts'));
+        return redirect()->route('admin');
     }
 
     public function indexByKategori($parentId)
@@ -75,11 +58,7 @@ class UlasanController extends Controller
         'foto3.max'       => 'Ukuran foto maksimal 10MB.',
     ]);
 
-    // Cek apakah request dari halaman admin atau publik
-    $previousUrl = url()->previous();
-    $isFromAdmin = str_contains($previousUrl, '/admin') || 
-                   str_contains($previousUrl, '/wisata/');
-    $status = ($isFromAdmin && auth()->check()) ? 'approved' : 'pending';
+    $status = auth()->check() ? 'approved' : 'pending';
 
     $data = [
         'wisata_id' => $wisata->id,

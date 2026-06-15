@@ -72,7 +72,7 @@
                 @endphp
 
                 @foreach($display_list as $id => $name)
-                    <a href="{{ url($category_url) }}"
+                    <a href="{{ route('sub-kategori', $id) }}"
                        class="block px-4 py-2 transition-colors duration-200
                        {{ $wisata->category_id == $id
                           ? 'bg-cyan-600 text-white hover:bg-cyan-50 hover:text-cyan-600'

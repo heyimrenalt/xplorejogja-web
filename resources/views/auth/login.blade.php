@@ -12,8 +12,6 @@
             <div class="auth-brand-tagline">Jelajahi Keindahan Yogyakarta</div>
             <div class="auth-split-divider"></div>
             <div class="auth-split-left-cta">
-                <p>Belum punya akun?</p>
-                <a href="{{ url('/register') }}" class="btn-outline-white">Daftar Sekarang</a>
             </div>
         </div>
     </div>

@@ -25,11 +25,13 @@ Route::get('/api/search', [PublicController::class, 'searchWisata'])->name('api.
 Route::get('/destinasi/{slug}', [PublicController::class, 'detail'])->name('wisata.detail');
 
 // Ulasan publik
-Route::post('/destinasi/{slug}/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+Route::post('/destinasi/{slug}/ulasan', [UlasanController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('ulasan.store');
 Route::get('/destinasi/{slug}/ulasan', [UlasanController::class, 'loadMore'])->name('ulasan.loadMore');
 
 // --- RUTE AUTH ---
-Auth::routes();
+Auth::routes(['register' => false]);
 
 // --- RUTE ADMIN (Wajib Login) ---
 Route::middleware(['auth'])->group(function () {

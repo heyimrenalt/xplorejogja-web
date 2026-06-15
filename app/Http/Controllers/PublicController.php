@@ -93,6 +93,7 @@ public function detail($slug)
                      ->get();
 
     $parentId = $wisata->category ? $wisata->category->parent_id : null;
+    $current_parent = $wisata->category && $wisata->category->parent ? $wisata->category->parent->name : null;
 
     if ($parentId == 15) {
         $view = 'detail-jasa';
@@ -125,7 +126,7 @@ public function detail($slug)
 
     $rataRating = $rataRating ? round($rataRating, 1) : 0;
 
-    return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating'));
+    return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent'));
 }
 public function hiburanKel()
 {

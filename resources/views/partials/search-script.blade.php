@@ -22,25 +22,44 @@
     function renderResults(items, keyword) {
         hasilSearch.innerHTML = '';
         if (items.length === 0) {
-            hasilSearch.innerHTML = `<div class="px-4 py-3 text-sm text-gray-500 italic">Destinasi "${keyword}" tidak ditemukan...</div>`;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'px-4 py-3 text-sm text-gray-500 italic';
+            msgDiv.textContent = `Destinasi "${keyword}" tidak ditemukan...`;
+            hasilSearch.appendChild(msgDiv);
         } else {
             items.forEach(item => {
                 const isBlog = item.parent_id == 27;
                 const href   = isBlog && item.link_nav ? item.link_nav : detailBase.replace('__SLUG__', item.slug);
-                const target = isBlog ? 'target="_blank" rel="noopener"' : '';
                 const thumb  = item.gambar
                     ? `<img src="${item.gambar}" class="w-10 h-10 rounded-lg object-cover shrink-0" loading="lazy">`
                     : `<div class="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center shrink-0"><i class="fas fa-image text-cyan-300 text-xs"></i></div>`;
 
+                const a = document.createElement('a');
+                a.href = href;
+                a.className = 'flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 border-b last:border-0 transition-colors';
+                if (isBlog) { a.target = '_blank'; a.rel = 'noopener'; }
+
+                const thumbEl = document.createElement('div');
+                thumbEl.innerHTML = thumb;
+                a.appendChild(thumbEl.firstElementChild);
+
+                const info = document.createElement('div');
+                info.className = 'min-w-0';
+
+                const pNama = document.createElement('p');
+                pNama.className = 'text-sm font-semibold text-cyan-800 truncate';
+                pNama.textContent = item.nama;
+
+                const pKat = document.createElement('p');
+                pKat.className = 'text-xs text-gray-400';
+                pKat.textContent = item.kategori;
+
+                info.appendChild(pNama);
+                info.appendChild(pKat);
+                a.appendChild(info);
+
                 const div = document.createElement('div');
-                div.innerHTML = `
-                    <a href="${href}" ${target} class="flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 border-b last:border-0 transition-colors">
-                        ${thumb}
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold text-cyan-800 truncate">${item.nama}</p>
-                            <p class="text-xs text-gray-400">${item.kategori}</p>
-                        </div>
-                    </a>`;
+                div.appendChild(a);
                 hasilSearch.appendChild(div);
             });
         }
@@ -99,25 +118,44 @@
     function renderResults(items, keyword) {
         hasilSearchMobile.innerHTML = '';
         if (items.length === 0) {
-            hasilSearchMobile.innerHTML = `<div class="px-4 py-3 text-sm text-gray-500 italic">Destinasi "${keyword}" tidak ditemukan...</div>`;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'px-4 py-3 text-sm text-gray-500 italic';
+            msgDiv.textContent = `Destinasi "${keyword}" tidak ditemukan...`;
+            hasilSearchMobile.appendChild(msgDiv);
         } else {
             items.forEach(item => {
                 const isBlog = item.parent_id == 27;
                 const href   = isBlog && item.link_nav ? item.link_nav : detailBase.replace('__SLUG__', item.slug);
-                const target = isBlog ? 'target="_blank" rel="noopener"' : '';
                 const thumb  = item.gambar
                     ? `<img src="${item.gambar}" class="w-10 h-10 rounded-lg object-cover shrink-0" loading="lazy">`
                     : `<div class="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center shrink-0"><i class="fas fa-image text-cyan-300 text-xs"></i></div>`;
 
+                const a = document.createElement('a');
+                a.href = href;
+                a.className = 'flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 border-b last:border-0 transition-colors';
+                if (isBlog) { a.target = '_blank'; a.rel = 'noopener'; }
+
+                const thumbEl = document.createElement('div');
+                thumbEl.innerHTML = thumb;
+                a.appendChild(thumbEl.firstElementChild);
+
+                const info = document.createElement('div');
+                info.className = 'min-w-0';
+
+                const pNama = document.createElement('p');
+                pNama.className = 'text-sm font-semibold text-cyan-800 truncate';
+                pNama.textContent = item.nama;
+
+                const pKat = document.createElement('p');
+                pKat.className = 'text-xs text-gray-400';
+                pKat.textContent = item.kategori;
+
+                info.appendChild(pNama);
+                info.appendChild(pKat);
+                a.appendChild(info);
+
                 const div = document.createElement('div');
-                div.innerHTML = `
-                    <a href="${href}" ${target} class="flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 border-b last:border-0 transition-colors">
-                        ${thumb}
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold text-cyan-800 truncate">${item.nama}</p>
-                            <p class="text-xs text-gray-400">${item.kategori}</p>
-                        </div>
-                    </a>`;
+                div.appendChild(a);
                 hasilSearchMobile.appendChild(div);
             });
         }

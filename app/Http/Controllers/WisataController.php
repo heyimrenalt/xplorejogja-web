@@ -116,6 +116,7 @@ class WisataController extends Controller
             'fasilitas'           => 'required',
             'alamat_lengkap'      => 'required',
             'link_gmaps'          => 'required|url',
+            'link_navigasi'       => 'nullable|url',
             'biaya_penginapan'    => 'nullable',
             'rincian_penginapan'  => 'nullable',
             'info_tiket_tambahan' => 'nullable',
@@ -219,7 +220,7 @@ class WisataController extends Controller
     public function show($id)
     {
         $wisata = Wisata::findOrFail($id);
-        return view('detail', compact('wisata'));
+        return redirect()->route('wisata.detail', $wisata->slug);
     }
 
     public function edit($id)
@@ -266,6 +267,7 @@ class WisataController extends Controller
             'fasilitas'           => 'required',
             'alamat_lengkap'      => 'required',
             'link_gmaps'          => 'required|url',
+            'link_navigasi'       => 'nullable|url',
             'biaya_penginapan'    => 'nullable',
             'rincian_penginapan'  => 'nullable',
             'info_tiket_tambahan' => 'nullable',

@@ -16,10 +16,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-@php
-$jasaActiveCategory = ($wisata->category->parent_id == 19) ? 'transportasi' : 'penginapan';
-@endphp
-@include('partials.navbar-static', ['activeCategory' => $jasaActiveCategory])
+@include('partials.navbar-dinamis')
 
 @include('partials.mobile-search-bar')
 

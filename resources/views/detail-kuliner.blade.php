@@ -16,7 +16,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-@include('partials.navbar-static', ['activeCategory' => 'kuliner'])
+@include('partials.navbar-dinamis')
 
 @include('partials.mobile-search-bar')
 
