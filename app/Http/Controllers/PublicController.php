@@ -13,19 +13,21 @@ class PublicController extends Controller
         $pamflets      = \App\Models\Pamflet::orderBy('urutan')->get();
         $wisataPopuler = \App\Models\Wisata::where('is_populer', true)->orderBy('urutan_populer')->limit(7)->get();
 
-        $alamIds      = \App\Models\Category::where('parent_id', 1)->pluck('id');
+        $allCategories = \App\Models\Category::whereIn('parent_id', [1, 8, 15, 19, 23])
+            ->select('id', 'parent_id')
+            ->get()
+            ->groupBy('parent_id');
+
+        $alamIds         = $allCategories->get(1, collect())->pluck('id');
+        $hiburanIds      = $allCategories->get(8, collect())->pluck('id');
+        $penginapanIds   = $allCategories->get(15, collect())->pluck('id');
+        $transportasiIds = $allCategories->get(19, collect())->pluck('id');
+        $kulinerIds      = $allCategories->get(23, collect())->pluck('id');
+
         $wisataAlam   = \App\Models\Wisata::whereIn('category_id', $alamIds)->where('tampil_home', true)->limit(4)->get();
-
-        $hiburanIds   = \App\Models\Category::where('parent_id', 8)->pluck('id');
         $hiburanKel   = \App\Models\Wisata::whereIn('category_id', $hiburanIds)->where('tampil_home', true)->limit(4)->get();
-
-        $penginapanIds = \App\Models\Category::where('parent_id', 15)->pluck('id');
         $penginapan    = \App\Models\Wisata::whereIn('category_id', $penginapanIds)->where('tampil_home', true)->limit(4)->get();
-
-        $transportasiIds = \App\Models\Category::where('parent_id', 19)->pluck('id');
         $transportasi    = \App\Models\Wisata::whereIn('category_id', $transportasiIds)->where('tampil_home', true)->limit(4)->get();
-
-        $kulinerIds   = \App\Models\Category::where('parent_id', 23)->pluck('id');
         $kuliner      = \App\Models\Wisata::whereIn('category_id', $kulinerIds)->where('tampil_home', true)->limit(4)->get();
 
         $blogInformasi = \App\Models\Wisata::whereHas('category', function($q) {
@@ -116,15 +118,13 @@ public function detail($slug)
         ->limit(5)
         ->get();
 
-    $totalUlasan = Ulasan::where('wisata_id', $wisata->id)
+    $stats = Ulasan::where('wisata_id', $wisata->id)
         ->where('status', 'approved')
-        ->count();
+        ->selectRaw('COUNT(*) as total, AVG(rating) as avg_rating')
+        ->first();
 
-    $rataRating = Ulasan::where('wisata_id', $wisata->id)
-        ->where('status', 'approved')
-        ->avg('rating');
-
-    $rataRating = $rataRating ? round($rataRating, 1) : 0;
+    $totalUlasan = $stats->total ?? 0;
+    $rataRating  = $stats->avg_rating ? round($stats->avg_rating, 1) : 0;
 
     return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent'));
 }
@@ -204,7 +204,8 @@ public function searchWisata(Request $request)
         return response()->json([]);
     }
 
-    $results = Wisata::with('category')
+    $results = Wisata::with(['category:id,name,parent_id'])
+        ->select('id', 'nama_wisata', 'slug', 'gambar1', 'link_navigasi', 'category_id')
         ->where('nama_wisata', 'LIKE', '%' . $keyword . '%')
         ->limit(10)
         ->get()

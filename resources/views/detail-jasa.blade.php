@@ -315,16 +315,27 @@
         }
     }
 
+    var currentOffset = 5;
     function loadMoreUlasan() {
         var btn = document.getElementById('btn-load-more');
         btn.textContent = 'Memuat...';
         btn.disabled = true;
-        fetch('{{ route("ulasan.loadMore", $wisata->slug) }}')
+        fetch('{{ route("ulasan.loadMore", $wisata->slug) }}?offset=' + currentOffset)
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 var container = document.getElementById('daftar-ulasan');
-                container.innerHTML = data.html;
-                btn.style.display = 'none';
+                container.insertAdjacentHTML('beforeend', data.html);
+                currentOffset += 10;
+                if (data.hasMore) {
+                    btn.textContent = 'Lihat ulasan berikutnya';
+                    btn.disabled = false;
+                } else {
+                    btn.style.display = 'none';
+                }
+            })
+            .catch(function() {
+                btn.textContent = 'Gagal memuat. Coba lagi';
+                btn.disabled = false;
             });
     }
     </script>

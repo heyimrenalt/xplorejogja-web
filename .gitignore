@@ -17,3 +17,4 @@ resources/views/auth_backup
 resources/views_backup_20260614_0113
 *.bak
 AUDIT_REPORT.md
+PERFORMANCE_AUDIT.md

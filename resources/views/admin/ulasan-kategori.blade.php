@@ -94,7 +94,7 @@
                 {{ $sub->name }}
                 @php
                     $subPending = 0;
-                    $subWisatas = \App\Models\Wisata::where('category_id', $sub->id)->pluck('id');
+                    $subWisatas = $wisataPerSub->get($sub->id, collect())->pluck('id');
                     foreach ($subWisatas as $wid) {
                         if (isset($ulasanPerWisata[$wid])) {
                             foreach ($ulasanPerWisata[$wid] as $u) {
@@ -116,11 +116,7 @@
     <div id="tab-{{ $sub->id }}" class="tab-content-panel" style="{{ $idx !== 0 ? 'display:none;' : '' }}">
 
         @php
-            $wisataList = \App\Models\Wisata::where('category_id', $sub->id)
-                ->orderByDesc('is_populer')
-                ->orderBy('urutan_populer')
-                ->orderBy('nama_wisata')
-                ->get();
+            $wisataList = $wisataPerSub->get($sub->id, collect());
         @endphp
 
         @forelse($wisataList as $wisata)

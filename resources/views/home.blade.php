@@ -81,7 +81,8 @@
                        class="block card rounded-2xl overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                         <div class="h-36 overflow-hidden">
                             <img src="{{ asset('images/' . $wp->gambar1) }}"
-                                 class="w-full h-full object-cover object-center">
+                                 class="w-full h-full object-cover object-center"
+                                 loading="lazy">
                         </div>
                         <div class="p-2 text-center bg-white">
                             <p class="text-xs font-bold text-cyan-700 truncate px-1">{{ $wp->nama_wisata }}</p>
@@ -138,7 +139,7 @@
             @foreach($wisataAlam as $wisata)
             <a href="{{ route('wisata.detail', $wisata->slug) }}" class="block bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.2),0_10px_10px_-5px_rgba(0,0,0,0.1)] group border border-gray-50">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-cyan-600 group-hover:text-cyan-800 transition-colors">{{ $wisata->nama_wisata }}</h4>
@@ -168,7 +169,7 @@
             @foreach($hiburanKel as $wisata)
             <a href="{{ route('wisata.detail', $wisata->slug) }}" class="block bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.2),0_10px_10px_-5px_rgba(0,0,0,0.1)] group border border-gray-50">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-cyan-600 group-hover:text-cyan-800 transition-colors">{{ $wisata->nama_wisata }}</h4>
@@ -198,7 +199,7 @@
             @foreach($penginapan as $wisata)
             <a href="{{ route('wisata.detail', $wisata->slug) }}" class="block bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.2),0_10px_10px_-5px_rgba(0,0,0,0.1)] group border border-gray-50">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-cyan-600 group-hover:text-cyan-800 transition-colors">{{ $wisata->nama_wisata }}</h4>
@@ -228,7 +229,7 @@
             @foreach($transportasi as $wisata)
             <a href="{{ route('wisata.detail', $wisata->slug) }}" class="block bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.2),0_10px_10px_-5px_rgba(0,0,0,0.1)] group border border-gray-50">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-cyan-600 group-hover:text-cyan-800 transition-colors">{{ $wisata->nama_wisata }}</h4>
@@ -258,7 +259,7 @@
             @foreach($kuliner as $wisata)
             <a href="{{ route('wisata.detail', $wisata->slug) }}" class="block bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.2),0_10px_10px_-5px_rgba(0,0,0,0.1)] group border border-gray-50">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-cyan-600 group-hover:text-cyan-800 transition-colors">{{ $wisata->nama_wisata }}</h4>
@@ -296,7 +297,7 @@
             @if($hasLink)
             <a href="{{ $blogHref }}" target="_blank" rel="noopener noreferrer" class="block bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.2),0_10px_10px_-5px_rgba(0,0,0,0.1)] group border border-gray-50">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center transition duration-300" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-cyan-600 group-hover:text-cyan-800 transition-colors">{{ $wisata->nama_wisata }}</h4>
@@ -305,7 +306,7 @@
             @else
             <div class="block bg-white rounded-2xl overflow-hidden border border-gray-50 opacity-60 cursor-not-allowed shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]">
                 <div class="h-36 sm:h-44 overflow-hidden">
-                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center">
+                    <img src="{{ asset('images/' . $wisata->gambar1) }}" class="w-full h-full object-cover object-center" loading="lazy">
                 </div>
                 <div class="p-4 text-center bg-white">
                     <h4 class="text-sm font-bold text-gray-400">{{ $wisata->nama_wisata }}</h4>

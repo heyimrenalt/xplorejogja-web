@@ -18,18 +18,20 @@ class UlasanController extends Controller
         $parentCategory = \App\Models\Category::findOrFail($parentId);
         $subKategoris = \App\Models\Category::where('parent_id', $parentId)->get();
 
-        $ulasanPerWisata = [];
-        foreach ($subKategoris as $sub) {
-            $wisatas = \App\Models\Wisata::where('category_id', $sub->id)->get();
-            foreach ($wisatas as $wisata) {
-                $ulasanPerWisata[$wisata->id] = \App\Models\Ulasan::where('wisata_id', $wisata->id)
-                    ->orderBy('urutan')
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-            }
-        }
+        $catIds = $subKategoris->pluck('id');
+        $wisataDenganUlasan = \App\Models\Wisata::whereIn('category_id', $catIds)
+            ->with(['ulasans' => function($q) {
+                $q->orderBy('urutan')->orderBy('created_at', 'desc');
+            }])
+            ->orderByDesc('is_populer')
+            ->orderBy('urutan_populer')
+            ->orderBy('nama_wisata')
+            ->get();
 
-        return view('admin.ulasan-kategori', compact('subKategoris', 'parentCategory', 'ulasanPerWisata'));
+        $ulasanPerWisata = $wisataDenganUlasan->keyBy('id')->map(function($w) { return $w->ulasans; });
+        $wisataPerSub = $wisataDenganUlasan->groupBy('category_id');
+
+        return view('admin.ulasan-kategori', compact('subKategoris', 'parentCategory', 'ulasanPerWisata', 'wisataPerSub'));
     }
 
     public function store(Request $request, $wisataSlug)
@@ -151,16 +153,34 @@ class UlasanController extends Controller
         return view('admin.ulasan-detail', compact('ulasan'));
     }
 
-    public function loadMore($slug)
+    public function loadMore($slug, \Illuminate\Http\Request $request)
     {
-        $wisata = Wisata::where('slug', $slug)->firstOrFail();
+        $wisata  = Wisata::where('slug', $slug)->firstOrFail();
+        $offset  = (int) $request->input('offset', 5);
+        $limit   = 10;
+
+        // Safety cap untuk prevent abuse
+        if ($offset < 0) $offset = 0;
+        if ($offset > 1000) $offset = 1000;
+
         $ulasans = Ulasan::where('wisata_id', $wisata->id)
             ->where('status', 'approved')
             ->orderBy('urutan')
             ->orderBy('created_at', 'desc')
+            ->offset($offset)
+            ->limit($limit)
             ->get();
 
+        $total = Ulasan::where('wisata_id', $wisata->id)
+            ->where('status', 'approved')
+            ->count();
+
         $html = view('partials.ulasan-list', compact('ulasans'))->render();
-        return response()->json(['html' => $html]);
+
+        return response()->json([
+            'html'    => $html,
+            'hasMore' => ($offset + $limit) < $total,
+            'total'   => $total,
+        ]);
     }
 }

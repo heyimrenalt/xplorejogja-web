@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Wisata;
 use App\Models\Pamflet;
 use App\Models\Ulasan;
@@ -11,28 +12,33 @@ class WisataController extends Controller
 {
     public function index()
     {
-        $wisataAlam   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 1); })->get();
-        $hiburanKel   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 8); })->get();
-        $penginapan   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 15); })->get();
-        $transportasi = Wisata::whereHas('category', function($q) { $q->where('parent_id', 19); })->get();
-        $kuliner      = Wisata::whereHas('category', function($q) { $q->where('parent_id', 23); })->get();
-        $blogs        = Wisata::whereHas('category', function($q) { $q->where('parent_id', 27); })->get();
-        $pamflets     = Pamflet::orderBy('urutan')->get();
-        $wisataPopuler = Wisata::where('is_populer', true)->orderBy('urutan_populer')->get();
+        $countWisataAlam   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 1); })->count();
+        $countHiburanKel   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 8); })->count();
+        $countPenginapan   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 15); })->count();
+        $countTransportasi = Wisata::whereHas('category', function($q) { $q->where('parent_id', 19); })->count();
+        $countKuliner      = Wisata::whereHas('category', function($q) { $q->where('parent_id', 23); })->count();
+        $blogs             = Wisata::whereHas('category', function($q) { $q->where('parent_id', 27); })->get();
+        $pamflets          = Pamflet::orderBy('urutan')->get();
+        $wisataPopuler     = Wisata::with('category')->where('is_populer', true)->orderBy('urutan_populer')->get();
 
         $parentIds = [1, 8, 15, 19, 23];
-        $pendingUlasan = [];
+        $pendingUlasan = DB::table('ulasans')
+            ->join('wisatas', 'ulasans.wisata_id', '=', 'wisatas.id')
+            ->join('categories', 'wisatas.category_id', '=', 'categories.id')
+            ->where('ulasans.status', 'pending')
+            ->whereIn('categories.parent_id', $parentIds)
+            ->groupBy('categories.parent_id')
+            ->selectRaw('categories.parent_id, COUNT(*) as total')
+            ->pluck('total', 'parent_id')
+            ->toArray();
+
         foreach ($parentIds as $pid) {
-            $catIds    = \App\Models\Category::where('parent_id', $pid)->pluck('id');
-            $wisataIds = Wisata::whereIn('category_id', $catIds)->pluck('id');
-            $pendingUlasan[$pid] = Ulasan::whereIn('wisata_id', $wisataIds)
-                ->where('status', 'pending')
-                ->count();
+            if (!isset($pendingUlasan[$pid])) $pendingUlasan[$pid] = 0;
         }
         $totalPendingUlasan = array_sum($pendingUlasan);
 
         return view('admin.dashboard', compact(
-            'wisataAlam', 'hiburanKel', 'penginapan', 'transportasi', 'kuliner',
+            'countWisataAlam', 'countHiburanKel', 'countPenginapan', 'countTransportasi', 'countKuliner',
             'blogs', 'pamflets', 'wisataPopuler',
             'pendingUlasan', 'totalPendingUlasan'
         ));
@@ -406,19 +412,35 @@ class WisataController extends Controller
     public function updateSubkategoriOrder(Request $request)
     {
         $order = $request->input('order', []);
-        foreach ($order as $index => $id) {
-            Wisata::where('id', $id)->update(['urutan_subkategori' => $index + 1]);
+        if (empty($order)) return response()->json(['success' => true]);
+
+        $cases = '';
+        $ids = [];
+        foreach ($order as $idx => $id) {
+            $idInt = (int) $id;
+            $ids[] = $idInt;
+            $cases .= " WHEN {$idInt} THEN " . ($idx + 1);
         }
+        $idList = implode(',', $ids);
+        DB::statement("UPDATE wisatas SET urutan_subkategori = CASE id{$cases} END WHERE id IN ({$idList})");
+
         return response()->json(['success' => true]);
     }
 
     public function updatePopulerOrder(Request $request)
     {
         $order = $request->input('order', []);
+        if (empty($order)) return response()->json(['success' => true]);
 
-        foreach ($order as $index => $id) {
-            Wisata::where('id', $id)->update(['urutan_populer' => $index + 1]);
+        $cases = '';
+        $ids = [];
+        foreach ($order as $idx => $id) {
+            $idInt = (int) $id;
+            $ids[] = $idInt;
+            $cases .= " WHEN {$idInt} THEN " . ($idx + 1);
         }
+        $idList = implode(',', $ids);
+        DB::statement("UPDATE wisatas SET urutan_populer = CASE id{$cases} END WHERE id IN ({$idList})");
 
         return response()->json(['success' => true]);
     }
@@ -430,10 +452,17 @@ class WisataController extends Controller
         $wisata->urutan_populer = null;
         $wisata->save();
 
-        $remaining = Wisata::where('is_populer', true)->orderBy('urutan_populer')->get();
-        foreach ($remaining as $index => $item) {
-            $item->urutan_populer = $index + 1;
-            $item->save();
+        $remainingIds = Wisata::where('is_populer', true)->orderBy('urutan_populer')->pluck('id');
+        if ($remainingIds->isNotEmpty()) {
+            $cases = '';
+            $ids = [];
+            foreach ($remainingIds as $idx => $id) {
+                $idInt = (int) $id;
+                $ids[] = $idInt;
+                $cases .= " WHEN {$idInt} THEN " . ($idx + 1);
+            }
+            $idList = implode(',', $ids);
+            DB::statement("UPDATE wisatas SET urutan_populer = CASE id{$cases} END WHERE id IN ({$idList})");
         }
 
         return response()->json(['success' => true]);
@@ -474,10 +503,17 @@ class WisataController extends Controller
             $wisata->urutan_populer = null;
             $wisata->save();
 
-            $remaining = Wisata::where('is_populer', true)->orderBy('urutan_populer')->get();
-            foreach ($remaining as $index => $item) {
-                $item->urutan_populer = $index + 1;
-                $item->save();
+            $remainingIds = Wisata::where('is_populer', true)->orderBy('urutan_populer')->pluck('id');
+            if ($remainingIds->isNotEmpty()) {
+                $cases = '';
+                $ids = [];
+                foreach ($remainingIds as $idx => $id) {
+                    $idInt = (int) $id;
+                    $ids[] = $idInt;
+                    $cases .= " WHEN {$idInt} THEN " . ($idx + 1);
+                }
+                $idList = implode(',', $ids);
+                DB::statement("UPDATE wisatas SET urutan_populer = CASE id{$cases} END WHERE id IN ({$idList})");
             }
         }
 

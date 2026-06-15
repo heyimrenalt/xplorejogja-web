@@ -162,7 +162,7 @@
     {{-- SIDEBAR --}}
     <div class="admin-sidebar">
         @php
-        $totalWisata = $wisataAlam->count() + $hiburanKel->count() + $penginapan->count() + $transportasi->count() + $kuliner->count();
+        $totalWisata = $countWisataAlam + $countHiburanKel + $countPenginapan + $countTransportasi + $countKuliner;
         $tabList = [
             ['id' => 'pamflet', 'label' => 'Pamflet',           'icon' => 'fa-images',    'sub' => $pamflets->count() . '/7 aktif'],
             ['id' => 'populer', 'label' => 'Destinasi Populer', 'icon' => 'fa-star',      'sub' => $wisataPopuler->count() . '/7 aktif'],
