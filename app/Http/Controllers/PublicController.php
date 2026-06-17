@@ -130,7 +130,7 @@ public function detail($slug)
 }
 public function hiburanKel()
 {
-    $category = \App\Models\Category::findOrFail(8);
+    $category = \App\Models\Category::find(8);
     $subKategoris = \App\Models\Category::where('parent_id', 8)
         ->with(['wisatas' => function($q) {
             $q->orderBy('urutan_subkategori', 'asc')
@@ -147,7 +147,7 @@ public function hiburanKel()
 
 public function penginapan()
 {
-    $category = \App\Models\Category::findOrFail(15);
+    $category = \App\Models\Category::find(15);
     $subKategoris = \App\Models\Category::where('parent_id', 15)
         ->with(['wisatas' => function($q) {
             $q->orderBy('urutan_subkategori', 'asc')
@@ -164,7 +164,7 @@ public function penginapan()
 
 public function transportasi()
 {
-    $category = \App\Models\Category::findOrFail(19);
+    $category = \App\Models\Category::find(19);
     $subKategoris = \App\Models\Category::where('parent_id', 19)
         ->with(['wisatas' => function($q) {
             $q->orderBy('urutan_subkategori', 'asc')
@@ -181,7 +181,7 @@ public function transportasi()
 
 public function kuliner()
 {
-    $category = \App\Models\Category::findOrFail(23);
+    $category = \App\Models\Category::find(23);
     $subKategoris = \App\Models\Category::where('parent_id', 23)
         ->with(['wisatas' => function($q) {
             $q->orderBy('urutan_subkategori', 'asc')
@@ -226,7 +226,7 @@ public function searchWisata(Request $request)
 
 public function blogInformasi()
 {
-    $category = \App\Models\Category::findOrFail(27);
+    $category = \App\Models\Category::find(27);
     $subKategoris = \App\Models\Category::where('parent_id', 27)
         ->with(['wisatas' => function($q) {
             $q->orderBy('urutan_subkategori', 'asc')

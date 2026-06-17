@@ -31,7 +31,7 @@
         @forelse($wisatas as $w)
         <a href="{{ route('wisata.detail', $w->slug) }}" class="block bg-white rounded-2xl overflow-hidden shadow-[0_8px_20px_-6px_rgba(0,0,0,0.2)] border border-gray-100 transition hover:-translate-y-1 group min-h-[320px] flex flex-col">
             <div class="h-44 relative">
-                <img src="{{ asset('images/' . $w->gambar1) }}" class="w-full h-full object-cover" alt="{{ $w->nama_wisata }}">
+                <img src="{{ asset('images/' . $w->gambar1) }}" class="w-full h-full object-cover" alt="{{ $w->nama_wisata }}" onerror="this.onerror=null;this.classList.add('hidden')">
             </div>
             <div class="p-4 flex justify-between items-center bg-gray-50/50 mt-auto">
                 <div class="flex-1">

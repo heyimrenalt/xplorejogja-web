@@ -79,8 +79,12 @@ foreach (['foto1', 'foto2', 'foto3'] as $foto) {
     if ($request->hasFile($foto)) {
         $file     = $request->file($foto);
         $namaFile = time() . '_ulasan_' . $foto . '_' . $file->getClientOriginalName();
-        $file->move(storage_path('app/public/ulasan'), $namaFile);
-        $data[$foto] = $namaFile;
+        try {
+            $file->move(storage_path('app/public/ulasan'), $namaFile);
+            $data[$foto] = $namaFile;
+        } catch (\Exception $e) {
+            // foto gagal diupload, ulasan tetap tersimpan tanpa foto ini
+        }
     }
 }
 

@@ -392,7 +392,7 @@ function escapeHtml(str) {
 const allCategories = @json($categories);
 
 // Saat halaman load, set nilai kategori yang sudah tersimpan
-const savedCategoryId = {{ $wisata->category_id }};
+const savedCategoryId = {{ $wisata->category_id ?? 'null' }};
 const savedParentId = {{ $wisata->category ? $wisata->category->parent_id : 'null' }};
 
 // Fungsi mengisi dropdown sub kategori

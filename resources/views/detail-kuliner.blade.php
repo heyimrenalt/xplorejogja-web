@@ -49,7 +49,7 @@
                 <h3 class="font-bold border-b-2 border-gray-800 w-fit mb-5 pb-1">Jam Operasional</h3>
                 <div class="flex items-center gap-3 mb-2">
                     <i class="fas fa-clock text-cyan-600"></i>
-                    <span class="text-sm font-semibold text-gray-700">{{ $wisata->jam_buka }} – {{ $wisata->jam_tutup }}</span>
+                    <span class="text-sm font-semibold text-gray-700">{{ $wisata->jam_buka ?? 'Tidak tersedia' }} – {{ $wisata->jam_tutup ?? '-' }}</span>
                 </div>
                 @if($wisata->info_tiket_tambahan)
                 <p class="text-xs text-gray-500 italic mt-3 leading-relaxed">{{ $wisata->info_tiket_tambahan }}</p>
