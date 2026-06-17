@@ -15,7 +15,7 @@ php artisan view:cache || true
 php artisan storage:link || true
 
 # Run migrations (kalau auto-migrate diinginkan)
-# php artisan migrate --force || true
+php artisan migrate --force || true
 
 # Start supervisor (nginx + php-fpm)
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
