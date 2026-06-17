@@ -71,18 +71,18 @@ class UlasanController extends Controller
         'urutan'    => \App\Models\Ulasan::where('wisata_id', $wisata->id)->max('urutan') + 1,
     ];
 
-    if (!is_dir(public_path('images/ulasan'))) {
-        mkdir(public_path('images/ulasan'), 0755, true);
-    }
+    if (!is_dir(storage_path('app/public/ulasan'))) {
+    mkdir(storage_path('app/public/ulasan'), 0775, true);
+}
 
-    foreach (['foto1', 'foto2', 'foto3'] as $foto) {
-        if ($request->hasFile($foto)) {
-            $file     = $request->file($foto);
-            $namaFile = time() . '_ulasan_' . $foto . '_' . $file->getClientOriginalName();
-            $file->move(public_path('images/ulasan'), $namaFile);
-            $data[$foto] = $namaFile;
-        }
+foreach (['foto1', 'foto2', 'foto3'] as $foto) {
+    if ($request->hasFile($foto)) {
+        $file     = $request->file($foto);
+        $namaFile = time() . '_ulasan_' . $foto . '_' . $file->getClientOriginalName();
+        $file->move(storage_path('app/public/ulasan'), $namaFile);
+        $data[$foto] = $namaFile;
     }
+}
 
     \App\Models\Ulasan::create($data);
 
@@ -135,7 +135,7 @@ class UlasanController extends Controller
 
         foreach (['foto1', 'foto2', 'foto3'] as $foto) {
             if ($ulasan->$foto) {
-                $path = public_path('images/ulasan/' . $ulasan->$foto);
+                $path = storage_path('app/public/ulasan/' . $ulasan->$foto);
                 if (file_exists($path) && is_file($path)) {
                     unlink($path);
                 }

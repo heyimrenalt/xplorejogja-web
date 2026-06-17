@@ -92,8 +92,8 @@
                 <div class="d-flex gap-2 flex-wrap">
                     @foreach(['foto1','foto2','foto3'] as $foto)
                         @if($ulasan->$foto)
-                        <a href="{{ asset('images/ulasan/' . $ulasan->$foto) }}" target="_blank">
-                            <img src="{{ asset('images/ulasan/' . $ulasan->$foto) }}"
+                        <a href="{{ asset('storage/ulasan/' . $ulasan->$foto1) }}" target="_blank">
+                            <img src="{{ asset('storage/ulasan/' . $ulasan->$foto1) }}"
                                  style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #dee2e6;">
                         </a>
                         @endif
