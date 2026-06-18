@@ -361,7 +361,10 @@
         var file = input.files && input.files[0];
         if (!file) return;
 
+         alert('DEBUG\nName: ' + file.name + '\nType: ' + file.type + '\nSize: ' + file.size + '\nExt: ' + file.name.split('.').pop().toLowerCase());
+    
         var ext  = file.name.split('.').pop().toLowerCase();
+
         var mime = file.type.toLowerCase();
         var isHeic = ext === 'heic' || ext === 'heif'
                   || mime === 'image/heic' || mime === 'image/heif';
