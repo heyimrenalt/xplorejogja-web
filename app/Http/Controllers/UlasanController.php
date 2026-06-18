@@ -71,9 +71,11 @@ class UlasanController extends Controller
         'urutan'    => \App\Models\Ulasan::where('wisata_id', $wisata->id)->max('urutan') + 1,
     ];
 
-    if (!is_dir(storage_path('app/public/ulasan'))) {
-    mkdir(storage_path('app/public/ulasan'), 0775, true);
-}
+    try {
+        if (!is_dir(storage_path('app/public/ulasan'))) {
+            @mkdir(storage_path('app/public/ulasan'), 0775, true);
+        }
+    } catch (\Throwable $e) {}
 
 foreach (['foto1', 'foto2', 'foto3'] as $foto) {
     if ($request->hasFile($foto)) {
@@ -141,7 +143,7 @@ foreach (['foto1', 'foto2', 'foto3'] as $foto) {
             if ($ulasan->$foto) {
                 $path = storage_path('app/public/ulasan/' . $ulasan->$foto);
                 if (file_exists($path) && is_file($path)) {
-                    unlink($path);
+                    try { @unlink($path); } catch (\Throwable $e) {}
                 }
             }
         }

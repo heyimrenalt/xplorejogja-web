@@ -189,8 +189,10 @@ class WisataController extends Controller
             if ($request->hasFile($img)) {
                 $file     = $request->file($img);
                 $namaFile = time() . '_' . $img . '_' . $file->getClientOriginalName();
-                $file->move(public_path('images'), $namaFile);
-                $data[$img] = $namaFile;
+                try {
+                    $file->move(public_path('images'), $namaFile);
+                    $data[$img] = $namaFile;
+                } catch (\Throwable $e) {}
             }
         }
 
@@ -341,14 +343,16 @@ class WisataController extends Controller
                 if ($wisata->$img) {
                     $oldFile = public_path('images/' . $wisata->$img);
                     if (file_exists($oldFile) && is_file($oldFile)) {
-                        unlink($oldFile);
+                        try { @unlink($oldFile); } catch (\Throwable $e) {}
                     }
                 }
 
                 $file     = $request->file($img);
                 $namaFile = time() . '_' . $img . '_' . $file->getClientOriginalName();
-                $file->move(public_path('images'), $namaFile);
-                $data[$img] = $namaFile;
+                try {
+                    $file->move(public_path('images'), $namaFile);
+                    $data[$img] = $namaFile;
+                } catch (\Throwable $e) {}
             }
         }
 
@@ -395,7 +399,7 @@ class WisataController extends Controller
             if ($wisata->$img) {
                 $path = public_path('images/' . $wisata->$img);
                 if (file_exists($path)) {
-                    unlink($path);
+                    try { @unlink($path); } catch (\Throwable $e) {}
                 }
             }
         }

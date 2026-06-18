@@ -39,12 +39,14 @@ class DeskripsiKotaController extends Controller
 
         if ($request->hasFile('gambar')) {
             if ($deskripsi->gambar && file_exists(public_path('images/' . $deskripsi->gambar))) {
-                unlink(public_path('images/' . $deskripsi->gambar));
+                try { @unlink(public_path('images/' . $deskripsi->gambar)); } catch (\Throwable $e) {}
             }
             $file     = $request->file('gambar');
             $namaFile = time() . '_deskripsi_kota_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $namaFile);
-            $deskripsi->gambar = $namaFile;
+            try {
+                $file->move(public_path('images'), $namaFile);
+                $deskripsi->gambar = $namaFile;
+            } catch (\Throwable $e) {}
         }
 
         $deskripsi->save();

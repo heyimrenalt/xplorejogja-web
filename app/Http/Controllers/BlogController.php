@@ -42,8 +42,10 @@ class BlogController extends Controller
         if ($request->hasFile('gambar1')) {
             $file = $request->file('gambar1');
             $namaFile = time() . '_gambar1_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $namaFile);
-            $data['gambar1'] = $namaFile;
+            try {
+                $file->move(public_path('images'), $namaFile);
+                $data['gambar1'] = $namaFile;
+            } catch (\Throwable $e) {}
         }
 
         Wisata::create($data);
@@ -86,12 +88,14 @@ class BlogController extends Controller
 
         if ($request->hasFile('gambar1')) {
             if ($blog->gambar1 && file_exists(public_path('images/' . $blog->gambar1))) {
-                unlink(public_path('images/' . $blog->gambar1));
+                try { @unlink(public_path('images/' . $blog->gambar1)); } catch (\Throwable $e) {}
             }
             $file = $request->file('gambar1');
             $namaFile = time() . '_gambar1_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $namaFile);
-            $data['gambar1'] = $namaFile;
+            try {
+                $file->move(public_path('images'), $namaFile);
+                $data['gambar1'] = $namaFile;
+            } catch (\Throwable $e) {}
         }
 
         $blog->update($data);
@@ -104,7 +108,7 @@ class BlogController extends Controller
         $blog = Wisata::findOrFail($id);
 
         if ($blog->gambar1 && file_exists(public_path('images/' . $blog->gambar1))) {
-            unlink(public_path('images/' . $blog->gambar1));
+            try { @unlink(public_path('images/' . $blog->gambar1)); } catch (\Throwable $e) {}
         }
 
         $blog->delete();

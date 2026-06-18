@@ -39,7 +39,9 @@ class PamfletController extends Controller
 
         $file     = $request->file('gambar');
         $namaFile = time() . '_pamflet_' . $file->getClientOriginalName();
-        $file->move(public_path('images'), $namaFile);
+        try {
+            $file->move(public_path('images'), $namaFile);
+        } catch (\Throwable $e) {}
 
         $maxUrutan = Pamflet::max('urutan');
         $urutan    = ($maxUrutan !== null ? (int)$maxUrutan : 0) + 1;
@@ -83,14 +85,16 @@ class PamfletController extends Controller
             if ($pamflet->gambar) {
                 $oldFile = public_path('images/' . $pamflet->gambar);
                 if (file_exists($oldFile) && is_file($oldFile)) {
-                    unlink($oldFile);
+                    try { @unlink($oldFile); } catch (\Throwable $e) {}
                 }
             }
 
             $file     = $request->file('gambar');
             $namaFile = time() . '_pamflet_' . $file->getClientOriginalName();
-            $file->move(public_path('images'), $namaFile);
-            $pamflet->gambar = $namaFile;
+            try {
+                $file->move(public_path('images'), $namaFile);
+                $pamflet->gambar = $namaFile;
+            } catch (\Throwable $e) {}
         }
 
         $pamflet->save();
@@ -109,7 +113,7 @@ class PamfletController extends Controller
         if ($pamflet->gambar) {
             $path = public_path('images/' . $pamflet->gambar);
             if (file_exists($path) && is_file($path)) {
-                unlink($path);
+                try { @unlink($path); } catch (\Throwable $e) {}
             }
         }
 
