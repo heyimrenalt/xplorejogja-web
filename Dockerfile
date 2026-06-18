@@ -38,8 +38,8 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction --no-script
 RUN npm install && npm run prod || npm run production || true
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images
 
 # Copy nginx config
 COPY docker/nginx.conf /etc/nginx/sites-available/default
