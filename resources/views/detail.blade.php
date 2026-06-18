@@ -300,13 +300,13 @@
                                 <input type='file'
                                        id='foto-input-{{ $n }}'
                                        name='foto{{ $n }}'
-                                       accept='image/jpeg,image/png,image/jpg'
+                                       accept='image/jpeg,image/png,image/jpg,image/heic,image/heif,.heic,.heif'
                                        style='display:none;'
                                        onchange='previewFoto(this, {{ $n }})'>
                             </div>
                             @endforeach
                         </div>
-                        <p style='font-size:11px; color:#9ca3af; margin-top:6px;'>Format: JPG, PNG. Maks 10MB per foto.</p>
+                        <p style='font-size:11px; color:#9ca3af; margin-top:6px;'>Format: JPG, PNG, HEIC. Maks 10MB per foto.</p>
                     </div>
 
                     <button type="submit"
@@ -320,6 +320,7 @@
 
 @include('partials.footer')
 
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const swiper = new Swiper('.myHeroSwiper', {
@@ -357,20 +358,53 @@
     });
 
     function previewFoto(input, n) {
-        if (input.files && input.files[0]) {
+        var file = input.files && input.files[0];
+        if (!file) return;
+
+        var ext  = file.name.split('.').pop().toLowerCase();
+        var mime = file.type.toLowerCase();
+        var isHeic = ext === 'heic' || ext === 'heif'
+                  || mime === 'image/heic' || mime === 'image/heif';
+
+        if (isHeic && typeof heic2any !== 'undefined') {
+            var placeholder = document.getElementById('placeholder-foto-' + n);
+            if (placeholder) {
+                placeholder.innerHTML = '<span style="font-size:9px;color:#6b7280;text-align:center;line-height:1.3;">Mengonversi<br>HEIC...</span>';
+            }
+            heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 })
+                .then(function(jpgBlob) {
+                    var baseName = file.name.replace(/\.(heic|heif)$/i, '');
+                    var jpgFile  = new File([jpgBlob], baseName + '.jpg', { type: 'image/jpeg' });
+                    try {
+                        var dt = new DataTransfer();
+                        dt.items.add(jpgFile);
+                        input.files = dt.files;
+                    } catch (e) { /* DataTransfer tidak didukung, preview tetap jalan */ }
+                    var reader = new FileReader();
+                    reader.onload = function(ev) {
+                        var preview = document.getElementById('preview-foto-' + n);
+                        if (preview) { preview.src = ev.target.result; preview.style.display = 'block'; }
+                        if (placeholder) { placeholder.style.display = 'none'; }
+                    };
+                    reader.readAsDataURL(jpgFile);
+                })
+                .catch(function() {
+                    input.value = '';
+                    var placeholder = document.getElementById('placeholder-foto-' + n);
+                    if (placeholder) {
+                        placeholder.innerHTML = '<i class="fas fa-plus text-gray-400 text-lg"></i>'
+                            + '<span style="font-size:9px;color:#ef4444;text-align:center;">Gagal.<br>Coba JPG/PNG</span>';
+                    }
+                });
+        } else {
             var reader = new FileReader();
             reader.onload = function(e) {
                 var label = document.getElementById('preview-foto-' + n);
                 var placeholder = document.getElementById('placeholder-foto-' + n);
-                if (label) {
-                    label.src = e.target.result;
-                    label.style.display = 'block';
-                }
-                if (placeholder) {
-                    placeholder.style.display = 'none';
-                }
+                if (label) { label.src = e.target.result; label.style.display = 'block'; }
+                if (placeholder) { placeholder.style.display = 'none'; }
             };
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(file);
         }
     }
 
