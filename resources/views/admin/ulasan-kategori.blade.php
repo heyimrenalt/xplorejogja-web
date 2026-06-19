@@ -305,7 +305,24 @@ function switchTab(tabId, btn) {
     });
     document.getElementById(tabId).style.display = 'block';
     btn.classList.add('active');
+    try { localStorage.setItem('ulasanKatTab_' + window.location.pathname, tabId); } catch(e) {}
 }
+// Restore tab aktif dari localStorage saat page load
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        var savedTab = localStorage.getItem('ulasanKatTab_' + window.location.pathname);
+        if (savedTab) {
+            var el = document.getElementById(savedTab);
+            var btn = document.querySelector('[onclick*="' + savedTab + '"]');
+            if (el && btn) {
+                document.querySelectorAll('.tab-content-panel').forEach(function(p) { p.style.display = 'none'; });
+                document.querySelectorAll('.nav-tabs .nav-link').forEach(function(b) { b.classList.remove('active'); });
+                el.style.display = 'block';
+                btn.classList.add('active');
+            }
+        }
+    } catch(e) {}
+});
 
 // ---- ACCORDION ----
 function toggleAccordion(wisataId) {

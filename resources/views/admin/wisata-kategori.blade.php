@@ -274,12 +274,30 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('
 // ---- TAB SWITCHING ----
 document.querySelectorAll('[data-subtab]').forEach(function(btn) {
     btn.addEventListener('click', function() {
+        var subId = this.getAttribute('data-subtab');
         document.querySelectorAll('[data-subtab]').forEach(function(b) { b.classList.remove('active'); });
         document.querySelectorAll('.subtab-panel').forEach(function(p) { p.classList.remove('active'); });
         this.classList.add('active');
-        var panel = document.getElementById('subtab-' + this.getAttribute('data-subtab'));
+        var panel = document.getElementById('subtab-' + subId);
         if (panel) { panel.classList.add('active'); }
+        try { localStorage.setItem('wisataKatTab_' + window.location.pathname, subId); } catch(e) {}
     });
+});
+// Restore tab aktif dari localStorage saat page load
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        var savedSubId = localStorage.getItem('wisataKatTab_' + window.location.pathname);
+        if (savedSubId) {
+            var btn = document.querySelector('[data-subtab="' + savedSubId + '"]');
+            var panel = document.getElementById('subtab-' + savedSubId);
+            if (btn && panel) {
+                document.querySelectorAll('[data-subtab]').forEach(function(b) { b.classList.remove('active'); });
+                document.querySelectorAll('.subtab-panel').forEach(function(p) { p.classList.remove('active'); });
+                btn.classList.add('active');
+                panel.classList.add('active');
+            }
+        }
+    } catch(e) {}
 });
 
 // ---- TOGGLE POPULER ----
