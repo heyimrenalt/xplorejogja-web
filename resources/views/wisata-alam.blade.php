@@ -31,7 +31,7 @@
             </a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @forelse($sub->wisatas as $wisata)
+            @forelse($sub->wisatas->take(3) as $wisata)
             <a href="{{ route('wisata.detail', $wisata->slug) }}"
                class="block bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:-translate-y-1 transition group">
                 <div class="h-44">

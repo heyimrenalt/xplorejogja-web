@@ -51,6 +51,6 @@ class DeskripsiKotaController extends Controller
 
         $deskripsi->save();
 
-        return redirect()->route('admin')->with('success', 'Deskripsi kota berhasil diupdate!');
+        return redirect()->route('deskripsi-kota.edit')->with('success', 'Deskripsi kota berhasil diupdate!');
     }
 }

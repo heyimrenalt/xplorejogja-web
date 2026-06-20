@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str; // ← tambah ini
+use Illuminate\Support\Str; 
 
 class Wisata extends Model
 {
@@ -20,7 +20,7 @@ class Wisata extends Model
         'tampil_home'  => 'boolean',
     ];
 
-    // ← tambah ini
+    
     protected static function booted()
 {
     static::creating(function ($wisata) {
