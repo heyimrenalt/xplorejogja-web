@@ -51,4 +51,7 @@ RUN chmod +x /start.sh
 EXPOSE 8080
 
 # Start
+# Backup images untuk populate volume saat first deploy
+RUN cp -r /var/www/html/public/images /tmp/images-backup
+
 CMD ["/start.sh"]
