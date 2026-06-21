@@ -240,12 +240,6 @@
                style="font-size:0.82rem;">
                 <i class="fas fa-utensils me-2 text-danger"></i> Kuliner
             </a>
-            <a href="{{ route('wisata.kategori', 27) }}"
-               onclick="saveLastTab('wisata')"
-               class="d-block px-4 py-2 text-decoration-none text-secondary"
-               style="font-size:0.82rem;">
-                <i class="fas fa-newspaper me-2 text-primary"></i> Blog & Informasi
-            </a>
         </div>
 
         {{-- Tab Blog & Informasi --}}
