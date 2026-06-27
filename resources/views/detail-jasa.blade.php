@@ -101,6 +101,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 border-t border-gray-100 pt-8">
                 @foreach($pakets as $paket)
 @php
+$_paketImages = [asset('images/' . $paket->gambar)];
+foreach ($paket->images as $_img) { $_paketImages[] = asset('images/' . $_img->path_gambar); }
 $paketData = json_encode([
     'gambar'             => asset('images/' . $paket->gambar),
     'nama_paket'         => $paket->nama_paket,
@@ -109,9 +111,11 @@ $paketData = json_encode([
     'transport'          => $paket->transport,
     'makan'              => $paket->makan,
     'harga'              => $paket->harga,
+    'satuan_harga'       => $paket->satuan_harga ?? 'orang',
+    'keterangan_harga'   => $paket->keterangan_harga,
     'destinasi_kunjungi' => $paket->destinasi_kunjungi,
     'termasuk'           => $paket->termasuk,
-    'tidak_termasuk'     => $paket->tidak_termasuk,
+    'images'             => $_paketImages,
 ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 @endphp
 <div class="rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer bg-white"
@@ -125,7 +129,10 @@ onclick="openPaketModal(JSON.parse(this.dataset.paket))">
                     <div class="p-4">
                         <p class="font-semibold text-gray-800 text-sm leading-snug">{{ $paket->nama_paket }}</p>
                         @if($paket->harga)
-                        <p class="text-cyan-600 font-bold text-sm mt-1">Rp{{ number_format($paket->harga, 0, ',', '.') }}/orang</p>
+                        <p class="text-cyan-600 font-bold text-sm mt-1">Rp{{ number_format($paket->harga, 0, ',', '.') }}/{{ $paket->satuan_harga ?? 'orang' }}</p>
+                        @if($paket->keterangan_harga)
+                        <p class="text-gray-400 text-xs italic mt-0.5">{{ $paket->keterangan_harga }}</p>
+                        @endif
                         @endif
                     </div>
                 </div>

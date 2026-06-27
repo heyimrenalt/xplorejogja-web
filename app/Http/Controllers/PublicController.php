@@ -128,7 +128,7 @@ public function detail($slug)
 
     $pakets = collect();
     if ($wisata->category_id == 22) {
-        $pakets = \App\Models\PaketWisata::where('wisata_id', $wisata->id)->latest()->get();
+        $pakets = \App\Models\PaketWisata::where('wisata_id', $wisata->id)->with('images')->latest()->get();
     }
 
     return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent', 'pakets'));
@@ -143,7 +143,7 @@ public function paketOpenTrip(Request $request)
         $wisata = \App\Models\Wisata::where('slug', $wisataSlug)->first();
     }
 
-    $query = \App\Models\PaketWisata::with('wisata');
+    $query = \App\Models\PaketWisata::with('wisata', 'images');
     if ($wisata) {
         $query->where('wisata_id', $wisata->id);
     }

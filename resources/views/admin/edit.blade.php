@@ -291,10 +291,33 @@
                                                    value="{{ old('paket_existing.' . $paket->id . '.nama_paket', $paket->nama_paket) }}">
                                         </div>
                                         <div class="col-md-6 mb-2">
-                                            <label class="form-label small">Ganti Gambar</label>
+                                            <label class="form-label small">Ganti Gambar Cover</label>
                                             <input type="file" name="paket_existing[{{ $paket->id }}][gambar]"
-                                                   class="form-control form-control-sm" accept="image/*">
+                                                   class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg">
                                             <small class="text-muted">Kosongkan jika tidak ingin mengganti</small>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <label class="form-label small">Gambar Tambahan</label>
+                                            @if($paket->images->isNotEmpty())
+                                            <div class="d-flex flex-wrap mb-2" id="existing-images-{{ $paket->id }}">
+                                                @foreach($paket->images->sortBy('urutan') as $img)
+                                                <div class="position-relative d-inline-block" id="paket-img-{{ $img->id }}" style="margin-right:6px; margin-bottom:6px;">
+                                                    <img src="{{ asset('images/' . $img->path_gambar) }}"
+                                                         style="height:60px; width:80px; object-fit:cover; border-radius:6px; border:1px solid #dee2e6;">
+                                                    <button type="button" onclick="hapusGambarTambahan({{ $img->id }})"
+                                                            class="btn btn-danger btn-sm p-0 position-absolute"
+                                                            style="top:-5px; right:-5px; width:18px; height:18px; font-size:12px; line-height:1; border-radius:50%;">×</button>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                            @else
+                                            <div id="existing-images-{{ $paket->id }}"></div>
+                                            @endif
+                                            <input type="file" name="paket_existing[{{ $paket->id }}][gambar_tambahan][]"
+                                                   class="form-control form-control-sm"
+                                                   accept="image/jpeg,image/png,image/jpg" multiple
+                                                   onchange="validateGambarTambahanExisting(this, {{ $paket->id }})">
+                                            <small class="text-muted">Tambah gambar baru (append). Total maks. 2 gambar tambahan.</small>
                                         </div>
                                         <div class="col-md-6 mb-2">
                                             <label class="form-label small">Lokasi</label>
@@ -325,11 +348,26 @@
                                                    placeholder="5x">
                                         </div>
                                         <div class="col-md-4 mb-2">
-                                            <label class="form-label small">Harga (Rp/orang)</label>
+                                            <label class="form-label small">Harga (Rp)</label>
                                             <input type="number" name="paket_existing[{{ $paket->id }}][harga]"
                                                    class="form-control form-control-sm"
                                                    value="{{ old('paket_existing.' . $paket->id . '.harga', $paket->harga) }}"
                                                    placeholder="350000">
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label small">Satuan Harga</label>
+                                            <select name="paket_existing[{{ $paket->id }}][satuan_harga]"
+                                                    class="form-control form-control-sm form-select">
+                                                <option value="orang" {{ ($paket->satuan_harga ?? 'orang') == 'orang' ? 'selected' : '' }}>Per Orang</option>
+                                                <option value="grup" {{ ($paket->satuan_harga ?? '') == 'grup' ? 'selected' : '' }}>Per Grup</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label small">Keterangan Harga</label>
+                                            <input type="text" name="paket_existing[{{ $paket->id }}][keterangan_harga]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.keterangan_harga', $paket->keterangan_harga) }}"
+                                                   placeholder="Contoh: minimal 3 orang">
                                         </div>
                                         <div class="col-12 mb-2">
                                             <label class="form-label small">Destinasi yang Dikunjungi</label>
@@ -337,17 +375,11 @@
                                                       class="form-control form-control-sm" rows="3"
                                                       placeholder="Satu destinasi per baris">{{ old('paket_existing.' . $paket->id . '.destinasi_kunjungi', $paket->destinasi_kunjungi) }}</textarea>
                                         </div>
-                                        <div class="col-md-6 mb-2">
-                                            <label class="form-label small">Termasuk</label>
+                                        <div class="col-12 mb-2">
+                                            <label class="form-label small">Fasilitas</label>
                                             <textarea name="paket_existing[{{ $paket->id }}][termasuk]"
                                                       class="form-control form-control-sm" rows="3"
                                                       placeholder="Satu item per baris">{{ old('paket_existing.' . $paket->id . '.termasuk', $paket->termasuk) }}</textarea>
-                                        </div>
-                                        <div class="col-md-6 mb-2">
-                                            <label class="form-label small">Tidak Termasuk</label>
-                                            <textarea name="paket_existing[{{ $paket->id }}][tidak_termasuk]"
-                                                      class="form-control form-control-sm" rows="3"
-                                                      placeholder="Satu item per baris">{{ old('paket_existing.' . $paket->id . '.tidak_termasuk', $paket->tidak_termasuk) }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -597,6 +629,42 @@ function updateDeletedHiddenInputs() {
     }).join('');
 }
 
+var deletedImageIds = [];
+
+function hapusGambarTambahan(imgId) {
+    var el = document.getElementById('paket-img-' + imgId);
+    if (el) el.remove();
+    deletedImageIds.push(imgId);
+    updateDeletedImagesInputs();
+}
+
+function updateDeletedImagesInputs() {
+    var container = document.getElementById('images-deleted-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'images-deleted-container';
+        document.querySelector('form').appendChild(container);
+    }
+    container.innerHTML = deletedImageIds.map(function(id) {
+        return '<input type="hidden" name="images_deleted[]" value="' + id + '">';
+    }).join('');
+}
+
+function validateGambarTambahan(input) {
+    if (input.files.length > 2) {
+        alert('Maksimal 2 gambar tambahan.');
+        input.value = '';
+    }
+}
+
+function validateGambarTambahanExisting(input, paketId) {
+    var remaining = document.querySelectorAll('#existing-images-' + paketId + ' [id^="paket-img-"]').length;
+    if (remaining + input.files.length > 2) {
+        alert('Total gambar tambahan maksimal 2. Saat ini masih ada ' + remaining + ' gambar.');
+        input.value = '';
+    }
+}
+
 function tambahPaketBaru() {
     var idx = paketBaruCount++;
     var container = document.getElementById('paket-baru-list');
@@ -616,8 +684,12 @@ function tambahPaketBaru() {
                 <input type="text" name="paket[${idx}][nama_paket]" class="form-control form-control-sm" placeholder="Contoh: Paket 3D2N Pantai" required>
             </div>
             <div class="col-md-6 mb-2">
-                <label class="form-label small">Gambar Paket <span class="text-danger">*</span></label>
-                <input type="file" name="paket[${idx}][gambar]" class="form-control form-control-sm" accept="image/*" required>
+                <label class="form-label small">Gambar Cover <span class="text-danger">*</span></label>
+                <input type="file" name="paket[${idx}][gambar]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg" required>
+            </div>
+            <div class="col-12 mb-2">
+                <label class="form-label small">Gambar Tambahan <span class="text-muted">(maks. 2, untuk slider modal)</span></label>
+                <input type="file" name="paket[${idx}][gambar_tambahan][]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg" multiple onchange="validateGambarTambahan(this)">
             </div>
             <div class="col-md-6 mb-2">
                 <label class="form-label small">Lokasi</label>
@@ -636,23 +708,29 @@ function tambahPaketBaru() {
                 <input type="text" name="paket[${idx}][makan]" class="form-control form-control-sm" placeholder="5x">
             </div>
             <div class="col-md-4 mb-2">
-                <label class="form-label small">Harga (Rp/orang)</label>
+                <label class="form-label small">Harga (Rp)</label>
                 <input type="number" name="paket[${idx}][harga]" class="form-control form-control-sm" placeholder="350000">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">Satuan Harga</label>
+                <select name="paket[${idx}][satuan_harga]" class="form-control form-control-sm form-select">
+                    <option value="orang">Per Orang</option>
+                    <option value="grup">Per Grup</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">Keterangan Harga</label>
+                <input type="text" name="paket[${idx}][keterangan_harga]" class="form-control form-control-sm" placeholder="Contoh: minimal 3 orang">
             </div>
             <div class="col-12 mb-2">
                 <label class="form-label small">Destinasi yang Dikunjungi</label>
                 <textarea name="paket[${idx}][destinasi_kunjungi]" class="form-control form-control-sm" rows="3"
                     placeholder="Satu destinasi per baris&#10;Contoh:&#10;Pantai Parangtritis&#10;Bukit Bintang"></textarea>
             </div>
-            <div class="col-md-6 mb-2">
-                <label class="form-label small">Termasuk</label>
+            <div class="col-12 mb-2">
+                <label class="form-label small">Fasilitas</label>
                 <textarea name="paket[${idx}][termasuk]" class="form-control form-control-sm" rows="3"
                     placeholder="Satu item per baris&#10;Contoh:&#10;Guide lokal&#10;Tiket masuk"></textarea>
-            </div>
-            <div class="col-md-6 mb-2">
-                <label class="form-label small">Tidak Termasuk</label>
-                <textarea name="paket[${idx}][tidak_termasuk]" class="form-control form-control-sm" rows="3"
-                    placeholder="Satu item per baris&#10;Contoh:&#10;Penginapan&#10;Biaya pribadi"></textarea>
             </div>
         </div>`;
     container.appendChild(div);

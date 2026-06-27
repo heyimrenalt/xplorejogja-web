@@ -445,6 +445,13 @@ function toggleSectionPaket(subCatId) {
     }
 }
 
+function validateGambarTambahan(input) {
+    if (input.files.length > 2) {
+        alert('Maksimal 2 gambar tambahan.');
+        input.value = '';
+    }
+}
+
 function tambahPaketBaru() {
     var idx = paketBaruCount++;
     var container = document.getElementById('paket-baru-list');
@@ -464,8 +471,12 @@ function tambahPaketBaru() {
                 <input type="text" name="paket[${idx}][nama_paket]" class="form-control form-control-sm" placeholder="Contoh: Paket 3D2N Pantai" required>
             </div>
             <div class="col-md-6 mb-2">
-                <label class="form-label small">Gambar Paket <span class="text-danger">*</span></label>
-                <input type="file" name="paket[${idx}][gambar]" class="form-control form-control-sm" accept="image/*" required>
+                <label class="form-label small">Gambar Cover <span class="text-danger">*</span></label>
+                <input type="file" name="paket[${idx}][gambar]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg" required>
+            </div>
+            <div class="col-12 mb-2">
+                <label class="form-label small">Gambar Tambahan <span class="text-muted">(maks. 2, untuk slider modal)</span></label>
+                <input type="file" name="paket[${idx}][gambar_tambahan][]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg" multiple onchange="validateGambarTambahan(this)">
             </div>
             <div class="col-md-6 mb-2">
                 <label class="form-label small">Lokasi</label>
@@ -484,23 +495,29 @@ function tambahPaketBaru() {
                 <input type="text" name="paket[${idx}][makan]" class="form-control form-control-sm" placeholder="5x">
             </div>
             <div class="col-md-4 mb-2">
-                <label class="form-label small">Harga (Rp/orang)</label>
+                <label class="form-label small">Harga (Rp)</label>
                 <input type="number" name="paket[${idx}][harga]" class="form-control form-control-sm" placeholder="350000">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">Satuan Harga</label>
+                <select name="paket[${idx}][satuan_harga]" class="form-control form-control-sm form-select">
+                    <option value="orang">Per Orang</option>
+                    <option value="grup">Per Grup</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">Keterangan Harga</label>
+                <input type="text" name="paket[${idx}][keterangan_harga]" class="form-control form-control-sm" placeholder="Contoh: minimal 3 orang">
             </div>
             <div class="col-12 mb-2">
                 <label class="form-label small">Destinasi yang Dikunjungi</label>
                 <textarea name="paket[${idx}][destinasi_kunjungi]" class="form-control form-control-sm" rows="3"
                     placeholder="Satu destinasi per baris&#10;Contoh:&#10;Pantai Parangtritis&#10;Bukit Bintang&#10;Taman Sari"></textarea>
             </div>
-            <div class="col-md-6 mb-2">
-                <label class="form-label small">Termasuk</label>
+            <div class="col-12 mb-2">
+                <label class="form-label small">Fasilitas</label>
                 <textarea name="paket[${idx}][termasuk]" class="form-control form-control-sm" rows="3"
                     placeholder="Satu item per baris&#10;Contoh:&#10;Guide lokal&#10;Tiket masuk&#10;Snack"></textarea>
-            </div>
-            <div class="col-md-6 mb-2">
-                <label class="form-label small">Tidak Termasuk</label>
-                <textarea name="paket[${idx}][tidak_termasuk]" class="form-control form-control-sm" rows="3"
-                    placeholder="Satu item per baris&#10;Contoh:&#10;Penginapan&#10;Biaya pribadi"></textarea>
             </div>
         </div>`;
     container.appendChild(div);

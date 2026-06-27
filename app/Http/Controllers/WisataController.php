@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Wisata;
 use App\Models\Pamflet;
 use App\Models\Ulasan;
+use App\Models\PaketWisataImage;
 
 class WisataController extends Controller
 {
@@ -215,9 +216,10 @@ class WisataController extends Controller
 
             $ext      = $gambarFile->getClientOriginalExtension();
             $namaFile = \Illuminate\Support\Str::random(20) . '.' . $ext;
+            $newPaket = null;
             try {
                 $gambarFile->move(public_path('images'), $namaFile);
-                \App\Models\PaketWisata::create([
+                $newPaket = \App\Models\PaketWisata::create([
                     'wisata_id'          => $wisata->id,
                     'nama_paket'         => $nama,
                     'gambar'             => $namaFile,
@@ -228,9 +230,30 @@ class WisataController extends Controller
                     'harga'              => !empty($paketData['harga']) ? (int) str_replace('.', '', $paketData['harga']) : null,
                     'destinasi_kunjungi' => $paketData['destinasi_kunjungi'] ?? null,
                     'termasuk'           => $paketData['termasuk'] ?? null,
-                    'tidak_termasuk'     => $paketData['tidak_termasuk'] ?? null,
+                    'satuan_harga'       => $paketData['satuan_harga'] ?? 'orang',
+                    'keterangan_harga'   => (isset($paketData['keterangan_harga']) && $paketData['keterangan_harga'] !== '') ? $paketData['keterangan_harga'] : null,
                 ]);
             } catch (\Throwable $e) {}
+            if ($newPaket) {
+                $gambarTambahanFiles = $paketFiles[$idx]['gambar_tambahan'] ?? [];
+                if (is_array($gambarTambahanFiles)) {
+                    $urutan = 1;
+                    foreach ($gambarTambahanFiles as $tambFile) {
+                        if ($urutan > 2) break;
+                        $tExt  = $tambFile->getClientOriginalExtension();
+                        $tName = \Illuminate\Support\Str::random(20) . '.' . $tExt;
+                        try {
+                            $tambFile->move(public_path('images'), $tName);
+                            \App\Models\PaketWisataImage::create([
+                                'paket_wisata_id' => $newPaket->id,
+                                'path_gambar'     => $tName,
+                                'urutan'          => $urutan,
+                            ]);
+                            $urutan++;
+                        } catch (\Throwable $e2) {}
+                    }
+                }
+            }
         }
 
         if ($request->filled('ulasan_raw')) {
@@ -275,7 +298,7 @@ class WisataController extends Controller
             ->get();
         $populerCount = Wisata::where('is_populer', true)->where('id', '!=', $id)->count();
         $ulasans      = Ulasan::where('wisata_id', $id)->orderBy('urutan')->get();
-        $pakets       = \App\Models\PaketWisata::where('wisata_id', $id)->latest()->get();
+        $pakets       = \App\Models\PaketWisata::where('wisata_id', $id)->with('images')->latest()->get();
         return view('admin.edit', compact('wisata', 'categories', 'populerCount', 'ulasans', 'pakets'));
     }
 
@@ -394,6 +417,22 @@ class WisataController extends Controller
 
         $wisata->update($data);
 
+        // Hapus gambar tambahan yang di-mark deleted
+        foreach ($request->input('images_deleted', []) as $imageId) {
+            $img = \App\Models\PaketWisataImage::find((int) $imageId);
+            if ($img) {
+                $ownerPaket = \App\Models\PaketWisata::where('id', $img->paket_wisata_id)
+                                ->where('wisata_id', $wisata->id)->first();
+                if ($ownerPaket) {
+                    $filePath = public_path('images/' . $img->path_gambar);
+                    if (file_exists($filePath) && is_file($filePath)) {
+                        try { @unlink($filePath); } catch (\Throwable $e) {}
+                    }
+                    $img->delete();
+                }
+            }
+        }
+
         // Update paket existing
         $paketExistingFiles = $request->file('paket_existing') ?? [];
         foreach ($request->input('paket_existing', []) as $paketId => $paketData) {
@@ -410,7 +449,8 @@ class WisataController extends Controller
                 'harga'              => !empty($paketData['harga']) ? (int) str_replace('.', '', $paketData['harga']) : null,
                 'destinasi_kunjungi' => $paketData['destinasi_kunjungi'] ?? null,
                 'termasuk'           => $paketData['termasuk'] ?? null,
-                'tidak_termasuk'     => $paketData['tidak_termasuk'] ?? null,
+                'satuan_harga'       => $paketData['satuan_harga'] ?? $paket->satuan_harga ?? 'orang',
+                'keterangan_harga'   => (isset($paketData['keterangan_harga']) && $paketData['keterangan_harga'] !== '') ? $paketData['keterangan_harga'] : null,
             ];
 
             $gambarFile = $paketExistingFiles[$paketId]['gambar'] ?? null;
@@ -430,6 +470,28 @@ class WisataController extends Controller
             }
 
             $paket->update($updateData);
+
+            // Append gambar tambahan baru
+            $gambarTambahanExisting = $paketExistingFiles[$paketId]['gambar_tambahan'] ?? [];
+            if (is_array($gambarTambahanExisting) && !empty($gambarTambahanExisting)) {
+                $existingCount = $paket->images()->count();
+                $urutan = $existingCount + 1;
+                foreach ($gambarTambahanExisting as $tambFile) {
+                    if ($existingCount >= 2) break;
+                    $tExt  = $tambFile->getClientOriginalExtension();
+                    $tName = \Illuminate\Support\Str::random(20) . '.' . $tExt;
+                    try {
+                        $tambFile->move(public_path('images'), $tName);
+                        \App\Models\PaketWisataImage::create([
+                            'paket_wisata_id' => $paket->id,
+                            'path_gambar'     => $tName,
+                            'urutan'          => $urutan,
+                        ]);
+                        $existingCount++;
+                        $urutan++;
+                    } catch (\Throwable $e2) {}
+                }
+            }
         }
 
         // Hapus paket yang di-mark deleted
@@ -452,9 +514,10 @@ class WisataController extends Controller
 
             $ext      = $gambarFile->getClientOriginalExtension();
             $namaFile = \Illuminate\Support\Str::random(20) . '.' . $ext;
+            $newPaket = null;
             try {
                 $gambarFile->move(public_path('images'), $namaFile);
-                \App\Models\PaketWisata::create([
+                $newPaket = \App\Models\PaketWisata::create([
                     'wisata_id'          => $wisata->id,
                     'nama_paket'         => $nama,
                     'gambar'             => $namaFile,
@@ -465,9 +528,30 @@ class WisataController extends Controller
                     'harga'              => !empty($paketData['harga']) ? (int) str_replace('.', '', $paketData['harga']) : null,
                     'destinasi_kunjungi' => $paketData['destinasi_kunjungi'] ?? null,
                     'termasuk'           => $paketData['termasuk'] ?? null,
-                    'tidak_termasuk'     => $paketData['tidak_termasuk'] ?? null,
+                    'satuan_harga'       => $paketData['satuan_harga'] ?? 'orang',
+                    'keterangan_harga'   => (isset($paketData['keterangan_harga']) && $paketData['keterangan_harga'] !== '') ? $paketData['keterangan_harga'] : null,
                 ]);
             } catch (\Throwable $e) {}
+            if ($newPaket) {
+                $gambarTambahanFiles2 = $paketFiles[$idx]['gambar_tambahan'] ?? [];
+                if (is_array($gambarTambahanFiles2)) {
+                    $urutan = 1;
+                    foreach ($gambarTambahanFiles2 as $tambFile) {
+                        if ($urutan > 2) break;
+                        $tExt  = $tambFile->getClientOriginalExtension();
+                        $tName = \Illuminate\Support\Str::random(20) . '.' . $tExt;
+                        try {
+                            $tambFile->move(public_path('images'), $tName);
+                            \App\Models\PaketWisataImage::create([
+                                'paket_wisata_id' => $newPaket->id,
+                                'path_gambar'     => $tName,
+                                'urutan'          => $urutan,
+                            ]);
+                            $urutan++;
+                        } catch (\Throwable $e2) {}
+                    }
+                }
+            }
         }
 
         if ($request->filled('ulasan_raw')) {

@@ -48,6 +48,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
        @foreach($pakets as $paket)
 @php
+$_paketImages = [asset('images/' . $paket->gambar)];
+foreach ($paket->images as $_img) { $_paketImages[] = asset('images/' . $_img->path_gambar); }
 $paketData = json_encode([
     'gambar'             => asset('images/' . $paket->gambar),
     'nama_paket'         => $paket->nama_paket,
@@ -56,9 +58,11 @@ $paketData = json_encode([
     'transport'          => $paket->transport,
     'makan'              => $paket->makan,
     'harga'              => $paket->harga,
+    'satuan_harga'       => $paket->satuan_harga ?? 'orang',
+    'keterangan_harga'   => $paket->keterangan_harga,
     'destinasi_kunjungi' => $paket->destinasi_kunjungi,
     'termasuk'           => $paket->termasuk,
-    'tidak_termasuk'     => $paket->tidak_termasuk,
+    'images'             => $_paketImages,
 ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 @endphp
 <div class="rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer bg-white"
@@ -75,7 +79,10 @@ onclick="openPaketModal(JSON.parse(this.dataset.paket))">
                 <p class="text-xs text-gray-400 mt-0.5">{{ $paket->wisata->nama_wisata }}</p>
                 @endif
                 @if($paket->harga)
-                <p class="text-cyan-600 font-bold text-sm mt-1">Rp{{ number_format($paket->harga, 0, ',', '.') }}/orang</p>
+                <p class="text-cyan-600 font-bold text-sm mt-1">Rp{{ number_format($paket->harga, 0, ',', '.') }}/{{ $paket->satuan_harga ?? 'orang' }}</p>
+                @if($paket->keterangan_harga)
+                <p class="text-gray-400 text-xs italic mt-0.5">{{ $paket->keterangan_harga }}</p>
+                @endif
                 @endif
                 <div class="flex flex-wrap gap-2 mt-2">
                     @if($paket->durasi)
@@ -85,7 +92,7 @@ onclick="openPaketModal(JSON.parse(this.dataset.paket))">
                     @endif
                     @if($paket->transport)
                     <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                        <i class="fas fa-bus text-cyan-500 mr-1"></i>{{ $paket->transport }}
+                        <i class="fas fa-car-side text-cyan-500 mr-1"></i>{{ $paket->transport }}
                     </span>
                     @endif
                 </div>
