@@ -28,12 +28,12 @@
             {{-- Nama Paket --}}
             <h2 id="modal-nama" class="text-xl font-bold text-gray-900 mb-2"></h2>
 
-            {{-- Lokasi --}}
+            {{-- Titik Kumpul --}}
             <p id="modal-lokasi-wrap" class="flex items-start gap-2 text-sm text-gray-500 mb-5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-2.003 3.5-4.697 3.5-8.327a8 8 0 10-16 0c0 3.63 1.556 6.326 3.5 8.327a19.583 19.583 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
                 </svg>
-                <span id="modal-lokasi"></span>
+                <span><span class="font-medium text-gray-700">Titik Kumpul:</span> <span id="modal-lokasi"></span></span>
             </p>
 
             {{-- 3 kolom info --}}
@@ -157,7 +157,7 @@ function openPaketModal(data) {
     var destWrap = document.getElementById('modal-destinasi-wrap');
     var destContainer = document.getElementById('modal-destinasi');
     if (data.destinasi_kunjungi) {
-        var items = data.destinasi_kunjungi.split('\n').filter(function(s) { return s.trim(); });
+        var items = data.destinasi_kunjungi.split(/[,\n]/).filter(function(s) { return s.trim(); }).map(function(s) { return s.trim(); });
         destContainer.innerHTML = items.map(function(item) {
             return '<span class="bg-cyan-50 text-cyan-800 border border-cyan-200 text-xs font-medium px-3 py-1 rounded-full">'
                 + _pmEscape(item.trim()) + '</span>';
@@ -170,7 +170,7 @@ function openPaketModal(data) {
     var fasilitasWrap = document.getElementById('modal-termasuk-wrap');
     var fasilitasList = document.getElementById('modal-termasuk');
     if (data.termasuk) {
-        var fItems = data.termasuk.split('\n').filter(function(s) { return s.trim(); });
+        var fItems = data.termasuk.split(/[,\n]/).filter(function(s) { return s.trim(); }).map(function(s) { return s.trim(); });
         fasilitasList.innerHTML = fItems.map(function(item) {
             return '<li class="flex items-start gap-2"><span class="text-green-500 font-bold shrink-0">✓</span><span class="text-gray-600">' + _pmEscape(item.trim()) + '</span></li>';
         }).join('');

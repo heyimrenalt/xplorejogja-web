@@ -104,7 +104,7 @@
         @if($wisata->instagram || $wisata->whatsapp || $wisata->facebook || $wisata->twitter || $wisata->tiktok || $wisata->youtube)
         <div class="mb-16">
             <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
-                <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Our Sosial Media
+                <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Sosial Media
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 border-t border-gray-100 pt-8">
                 @if($wisata->instagram)

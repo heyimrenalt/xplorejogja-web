@@ -145,24 +145,50 @@ class WisataController extends Controller
             $rules['biaya_parkir'] = 'required';
         }
 
+        if (!empty($request->input('paket'))) {
+            $rules['paket.*.nama_paket']         = 'required|string|max:255';
+            $rules['paket.*.gambar']             = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['paket.*.lokasi']             = 'required|string';
+            $rules['paket.*.durasi']             = 'required|string';
+            $rules['paket.*.transport']          = 'required|string';
+            $rules['paket.*.makan']              = 'required|string';
+            $rules['paket.*.harga']              = 'required|numeric|min:0';
+            $rules['paket.*.satuan_harga']       = 'required|in:orang,grup';
+            $rules['paket.*.destinasi_kunjungi'] = 'required|string';
+            $rules['paket.*.termasuk']           = 'required|string';
+        }
+
         $request->validate($rules, [
-            'category_id.required'    => 'Kategori wajib dipilih.',
-            'nama_wisata.required'    => $labelNama . ' wajib diisi.',
-            'gambar1.required'        => 'Gambar utama wajib diunggah.',
-            'gambar1.image'           => 'File harus berupa gambar.',
-            'gambar1.mimes'           => 'Format gambar harus jpeg, png, atau jpg.',
-            'gambar1.max'             => 'Ukuran gambar maksimal 2MB.',
-            'gambar2.mimes'           => 'Format gambar 2 harus jpeg, png, atau jpg.',
-            'gambar3.mimes'           => 'Format gambar 3 harus jpeg, png, atau jpg.',
-            'deskripsi.required'      => 'Deskripsi wajib diisi.',
-            'jam_buka.required'       => 'Jam buka wajib diisi.',
-            'jam_tutup.required'      => 'Jam tutup wajib diisi.',
-            'harga_tiket.required'    => 'Harga wajib diisi.',
-            'fasilitas.required'      => 'Fasilitas wajib diisi.',
-            'alamat_lengkap.required' => 'Alamat lengkap wajib diisi.',
-            'link_gmaps.required'     => 'Link Google Maps wajib diisi.',
-            'link_gmaps.url'          => 'Format link Google Maps tidak valid.',
-            'biaya_parkir.required'   => 'Rincian biaya parkir wajib diisi.',
+            'category_id.required'                    => 'Kategori wajib dipilih.',
+            'nama_wisata.required'                    => $labelNama . ' wajib diisi.',
+            'gambar1.required'                        => 'Gambar utama wajib diunggah.',
+            'gambar1.image'                           => 'File harus berupa gambar.',
+            'gambar1.mimes'                           => 'Format gambar harus jpeg, png, atau jpg.',
+            'gambar1.max'                             => 'Ukuran gambar maksimal 2MB.',
+            'gambar2.mimes'                           => 'Format gambar 2 harus jpeg, png, atau jpg.',
+            'gambar3.mimes'                           => 'Format gambar 3 harus jpeg, png, atau jpg.',
+            'deskripsi.required'                      => 'Deskripsi wajib diisi.',
+            'jam_buka.required'                       => 'Jam buka wajib diisi.',
+            'jam_tutup.required'                      => 'Jam tutup wajib diisi.',
+            'harga_tiket.required'                    => 'Harga wajib diisi.',
+            'fasilitas.required'                      => 'Fasilitas wajib diisi.',
+            'alamat_lengkap.required'                 => 'Alamat lengkap wajib diisi.',
+            'link_gmaps.required'                     => 'Link Google Maps wajib diisi.',
+            'link_gmaps.url'                          => 'Format link Google Maps tidak valid.',
+            'biaya_parkir.required'                   => 'Rincian biaya parkir wajib diisi.',
+            'paket.*.nama_paket.required'             => 'Nama paket wajib diisi.',
+            'paket.*.gambar.required'                 => 'Gambar cover paket wajib diunggah.',
+            'paket.*.gambar.image'                    => 'File cover paket harus berupa gambar.',
+            'paket.*.gambar.mimes'                    => 'Format gambar cover harus jpeg, png, atau jpg.',
+            'paket.*.lokasi.required'                 => 'Titik kumpul paket wajib diisi.',
+            'paket.*.durasi.required'                 => 'Durasi paket wajib diisi.',
+            'paket.*.transport.required'              => 'Transportasi paket wajib diisi.',
+            'paket.*.makan.required'                  => 'Informasi makan paket wajib diisi.',
+            'paket.*.harga.required'                  => 'Harga paket wajib diisi.',
+            'paket.*.harga.numeric'                   => 'Harga paket harus berupa angka.',
+            'paket.*.satuan_harga.required'           => 'Satuan harga paket wajib dipilih.',
+            'paket.*.destinasi_kunjungi.required'     => 'Destinasi yang dikunjungi wajib diisi.',
+            'paket.*.termasuk.required'               => 'Fasilitas paket wajib diisi.',
         ]);
 
         // Cek batas destinasi populer
@@ -350,22 +376,48 @@ class WisataController extends Controller
             $rules['biaya_parkir'] = 'required';
         }
 
+        if (!empty($request->input('paket'))) {
+            $rules['paket.*.nama_paket']         = 'required|string|max:255';
+            $rules['paket.*.gambar']             = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['paket.*.lokasi']             = 'required|string';
+            $rules['paket.*.durasi']             = 'required|string';
+            $rules['paket.*.transport']          = 'required|string';
+            $rules['paket.*.makan']              = 'required|string';
+            $rules['paket.*.harga']              = 'required|numeric|min:0';
+            $rules['paket.*.satuan_harga']       = 'required|in:orang,grup';
+            $rules['paket.*.destinasi_kunjungi'] = 'required|string';
+            $rules['paket.*.termasuk']           = 'required|string';
+        }
+
         $request->validate($rules, [
-            'category_id.required'    => 'Kategori wajib dipilih.',
-            'nama_wisata.required'    => $labelNama . ' wajib diisi.',
-            'gambar1.image'           => 'File harus berupa gambar.',
-            'gambar1.mimes'           => 'Format gambar harus jpeg, png, atau jpg.',
-            'gambar2.mimes'           => 'Format gambar harus jpeg, png, atau jpg.',
-            'gambar3.mimes'           => 'Format gambar harus jpeg, png, atau jpg.',
-            'deskripsi.required'      => 'Deskripsi wajib diisi.',
-            'jam_buka.required'       => 'Jam buka wajib diisi.',
-            'jam_tutup.required'      => 'Jam tutup wajib diisi.',
-            'harga_tiket.required'    => 'Harga wajib diisi.',
-            'fasilitas.required'      => 'Fasilitas wajib diisi.',
-            'alamat_lengkap.required' => 'Alamat lengkap wajib diisi.',
-            'link_gmaps.required'     => 'Link Google Maps wajib diisi.',
-            'link_gmaps.url'          => 'Format link Google Maps tidak valid.',
-            'biaya_parkir.required'   => 'Rincian biaya parkir wajib diisi.',
+            'category_id.required'                    => 'Kategori wajib dipilih.',
+            'nama_wisata.required'                    => $labelNama . ' wajib diisi.',
+            'gambar1.image'                           => 'File harus berupa gambar.',
+            'gambar1.mimes'                           => 'Format gambar harus jpeg, png, atau jpg.',
+            'gambar2.mimes'                           => 'Format gambar harus jpeg, png, atau jpg.',
+            'gambar3.mimes'                           => 'Format gambar harus jpeg, png, atau jpg.',
+            'deskripsi.required'                      => 'Deskripsi wajib diisi.',
+            'jam_buka.required'                       => 'Jam buka wajib diisi.',
+            'jam_tutup.required'                      => 'Jam tutup wajib diisi.',
+            'harga_tiket.required'                    => 'Harga wajib diisi.',
+            'fasilitas.required'                      => 'Fasilitas wajib diisi.',
+            'alamat_lengkap.required'                 => 'Alamat lengkap wajib diisi.',
+            'link_gmaps.required'                     => 'Link Google Maps wajib diisi.',
+            'link_gmaps.url'                          => 'Format link Google Maps tidak valid.',
+            'biaya_parkir.required'                   => 'Rincian biaya parkir wajib diisi.',
+            'paket.*.nama_paket.required'             => 'Nama paket wajib diisi.',
+            'paket.*.gambar.required'                 => 'Gambar cover paket wajib diunggah.',
+            'paket.*.gambar.image'                    => 'File cover paket harus berupa gambar.',
+            'paket.*.gambar.mimes'                    => 'Format gambar cover harus jpeg, png, atau jpg.',
+            'paket.*.lokasi.required'                 => 'Titik kumpul paket wajib diisi.',
+            'paket.*.durasi.required'                 => 'Durasi paket wajib diisi.',
+            'paket.*.transport.required'              => 'Transportasi paket wajib diisi.',
+            'paket.*.makan.required'                  => 'Informasi makan paket wajib diisi.',
+            'paket.*.harga.required'                  => 'Harga paket wajib diisi.',
+            'paket.*.harga.numeric'                   => 'Harga paket harus berupa angka.',
+            'paket.*.satuan_harga.required'           => 'Satuan harga paket wajib dipilih.',
+            'paket.*.destinasi_kunjungi.required'     => 'Destinasi yang dikunjungi wajib diisi.',
+            'paket.*.termasuk.required'               => 'Fasilitas paket wajib diisi.',
         ]);
 
         // Cek batas destinasi populer (hanya jika baru dijadikan populer)
@@ -680,7 +732,8 @@ class WisataController extends Controller
                             ->with(['wisatas' => function ($q) {
                                 $q->orderByDesc('is_populer')
                                   ->orderBy('urutan_populer')
-                                  ->orderBy('nama_wisata');
+                                  ->orderBy('nama_wisata')
+                                  ->orderBy('created_at', 'desc');
                             }])
                             ->get();
 

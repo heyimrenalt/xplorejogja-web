@@ -24,11 +24,11 @@ class PublicController extends Controller
         $transportasiIds = $allCategories->get(19, collect())->pluck('id');
         $kulinerIds      = $allCategories->get(23, collect())->pluck('id');
 
-        $wisataAlam   = \App\Models\Wisata::whereIn('category_id', $alamIds)->where('tampil_home', true)->limit(4)->get();
-        $hiburanKel   = \App\Models\Wisata::whereIn('category_id', $hiburanIds)->where('tampil_home', true)->limit(4)->get();
-        $penginapan    = \App\Models\Wisata::whereIn('category_id', $penginapanIds)->where('tampil_home', true)->limit(4)->get();
-        $transportasi    = \App\Models\Wisata::whereIn('category_id', $transportasiIds)->where('tampil_home', true)->limit(4)->get();
-        $kuliner      = \App\Models\Wisata::whereIn('category_id', $kulinerIds)->where('tampil_home', true)->limit(4)->get();
+        $wisataAlam   = \App\Models\Wisata::whereIn('category_id', $alamIds)->where('tampil_home', true)->orderBy('created_at', 'desc')->limit(4)->get();
+        $hiburanKel   = \App\Models\Wisata::whereIn('category_id', $hiburanIds)->where('tampil_home', true)->orderBy('created_at', 'desc')->limit(4)->get();
+        $penginapan    = \App\Models\Wisata::whereIn('category_id', $penginapanIds)->where('tampil_home', true)->orderBy('created_at', 'desc')->limit(4)->get();
+        $transportasi    = \App\Models\Wisata::whereIn('category_id', $transportasiIds)->where('tampil_home', true)->orderBy('created_at', 'desc')->limit(4)->get();
+        $kuliner      = \App\Models\Wisata::whereIn('category_id', $kulinerIds)->where('tampil_home', true)->orderBy('created_at', 'desc')->limit(4)->get();
 
         $blogInformasi = \App\Models\Wisata::whereHas('category', function($q) {
             $q->where('parent_id', 27);

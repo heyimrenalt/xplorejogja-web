@@ -234,10 +234,89 @@
                                 <i class="fas fa-route me-2"></i> Paket Open Trip
                             </h6>
                             <small class="text-muted d-block mb-3">
-                                Tambah paket open trip untuk ditampilkan di halaman detail. Nama paket &amp; gambar wajib diisi.
+                                Tambah paket open trip untuk ditampilkan di halaman detail. Semua field wajib diisi kecuali Gambar Tambahan dan Keterangan Harga.
                             </small>
 
-                            <div id="paket-baru-list"></div>
+                            <div id="paket-baru-list">
+                                @php $oldPakets = old('paket', []); @endphp
+                                @foreach($oldPakets as $oldIdx => $oldPaket)
+                                <div class="border rounded p-3 mb-3 bg-white" id="paket-baru-row-{{ $oldIdx }}">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong class="small" style="color:#0e7490;">Paket Baru #{{ $oldIdx + 1 }}</strong>
+                                        <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="hapusPaketBaru({{ $oldIdx }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Nama Paket <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][nama_paket]" class="form-control form-control-sm" value="{{ $oldPaket['nama_paket'] ?? '' }}" placeholder="Contoh: Paket 3D2N Pantai">
+                                            @error('paket.' . $oldIdx . '.nama_paket')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Gambar Cover <span class="text-danger">*</span></label>
+                                            <input type="file" name="paket[{{ $oldIdx }}][gambar]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg">
+                                            <small class="text-muted">Unggah ulang gambar cover.</small>
+                                            @error('paket.' . $oldIdx . '.gambar')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <label class="form-label small">Gambar Tambahan <span class="text-muted">(maks. 2, untuk slider modal)</span></label>
+                                            <input type="file" name="paket[{{ $oldIdx }}][gambar_tambahan][]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg" multiple onchange="validateGambarTambahan(this)">
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Titik Kumpul <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][lokasi]" class="form-control form-control-sm" value="{{ $oldPaket['lokasi'] ?? '' }}" placeholder="Contoh: Stasiun Tugu, Malioboro Mall, Hotel XYZ">
+                                            <small class="text-muted">Tempat meeting point untuk memulai trip.</small>
+                                            @error('paket.' . $oldIdx . '.lokasi')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label small">Durasi <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][durasi]" class="form-control form-control-sm" value="{{ $oldPaket['durasi'] ?? '' }}" placeholder="3D2N">
+                                            @error('paket.' . $oldIdx . '.durasi')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label small">Transport <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][transport]" class="form-control form-control-sm" value="{{ $oldPaket['transport'] ?? '' }}" placeholder="Elf AC">
+                                            @error('paket.' . $oldIdx . '.transport')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label small">Makan <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][makan]" class="form-control form-control-sm" value="{{ $oldPaket['makan'] ?? '' }}" placeholder="5x">
+                                            @error('paket.' . $oldIdx . '.makan')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label small">Harga (Rp) <span class="text-danger">*</span></label>
+                                            <input type="number" name="paket[{{ $oldIdx }}][harga]" class="form-control form-control-sm" value="{{ $oldPaket['harga'] ?? '' }}" placeholder="350000">
+                                            @error('paket.' . $oldIdx . '.harga')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label small">Satuan Harga <span class="text-danger">*</span></label>
+                                            <select name="paket[{{ $oldIdx }}][satuan_harga]" class="form-control form-control-sm form-select">
+                                                <option value="orang" {{ ($oldPaket['satuan_harga'] ?? 'orang') == 'orang' ? 'selected' : '' }}>Per Orang</option>
+                                                <option value="grup" {{ ($oldPaket['satuan_harga'] ?? '') == 'grup' ? 'selected' : '' }}>Per Grup</option>
+                                            </select>
+                                            @error('paket.' . $oldIdx . '.satuan_harga')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label small">Keterangan Harga</label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][keterangan_harga]" class="form-control form-control-sm" value="{{ $oldPaket['keterangan_harga'] ?? '' }}" placeholder="Contoh: minimal 3 orang">
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <label class="form-label small">Destinasi yang Dikunjungi <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][destinasi_kunjungi]" class="form-control form-control-sm" value="{{ $oldPaket['destinasi_kunjungi'] ?? '' }}" placeholder="Contoh: Pantai Parangtritis, Tebing Breksi, Hutan Pinus">
+                                            <small class="text-muted">Pisahkan setiap item dengan koma.</small>
+                                            @error('paket.' . $oldIdx . '.destinasi_kunjungi')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <label class="form-label small">Fasilitas <span class="text-danger">*</span></label>
+                                            <input type="text" name="paket[{{ $oldIdx }}][termasuk]" class="form-control form-control-sm" value="{{ $oldPaket['termasuk'] ?? '' }}" placeholder="Contoh: Guide lokal, Snack, Air minum, Tiket masuk">
+                                            <small class="text-muted">Pisahkan setiap item dengan koma.</small>
+                                            @error('paket.' . $oldIdx . '.termasuk')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
 
                             <button type="button" class="btn btn-sm mb-3"
                                     style="background:#e0f2fe; color:#0e7490; border:1px dashed #0e7490;"
@@ -436,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // --- Paket Open Trip ---
-var paketBaruCount = 0;
+var paketBaruCount = {{ count(old('paket', [])) }};
 
 function toggleSectionPaket(subCatId) {
     var section = document.getElementById('section-paket-open-trip');
@@ -479,27 +558,28 @@ function tambahPaketBaru() {
                 <input type="file" name="paket[${idx}][gambar_tambahan][]" class="form-control form-control-sm" accept="image/jpeg,image/png,image/jpg" multiple onchange="validateGambarTambahan(this)">
             </div>
             <div class="col-md-6 mb-2">
-                <label class="form-label small">Lokasi</label>
-                <input type="text" name="paket[${idx}][lokasi]" class="form-control form-control-sm" placeholder="Contoh: Yogyakarta - Merapi">
+                <label class="form-label small">Titik Kumpul <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][lokasi]" class="form-control form-control-sm" placeholder="Contoh: Stasiun Tugu, Malioboro Mall, Hotel XYZ" required>
+                <small class="text-muted">Tempat meeting point untuk memulai trip.</small>
             </div>
             <div class="col-md-2 mb-2">
-                <label class="form-label small">Durasi</label>
-                <input type="text" name="paket[${idx}][durasi]" class="form-control form-control-sm" placeholder="3D2N">
+                <label class="form-label small">Durasi <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][durasi]" class="form-control form-control-sm" placeholder="3D2N" required>
             </div>
             <div class="col-md-2 mb-2">
-                <label class="form-label small">Transport</label>
-                <input type="text" name="paket[${idx}][transport]" class="form-control form-control-sm" placeholder="Elf AC">
+                <label class="form-label small">Transport <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][transport]" class="form-control form-control-sm" placeholder="Elf AC" required>
             </div>
             <div class="col-md-2 mb-2">
-                <label class="form-label small">Makan</label>
-                <input type="text" name="paket[${idx}][makan]" class="form-control form-control-sm" placeholder="5x">
+                <label class="form-label small">Makan <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][makan]" class="form-control form-control-sm" placeholder="5x" required>
             </div>
             <div class="col-md-4 mb-2">
-                <label class="form-label small">Harga (Rp)</label>
-                <input type="number" name="paket[${idx}][harga]" class="form-control form-control-sm" placeholder="350000">
+                <label class="form-label small">Harga (Rp) <span class="text-danger">*</span></label>
+                <input type="number" name="paket[${idx}][harga]" class="form-control form-control-sm" placeholder="350000" required>
             </div>
             <div class="col-md-4 mb-2">
-                <label class="form-label small">Satuan Harga</label>
+                <label class="form-label small">Satuan Harga <span class="text-danger">*</span></label>
                 <select name="paket[${idx}][satuan_harga]" class="form-control form-control-sm form-select">
                     <option value="orang">Per Orang</option>
                     <option value="grup">Per Grup</option>
@@ -510,14 +590,14 @@ function tambahPaketBaru() {
                 <input type="text" name="paket[${idx}][keterangan_harga]" class="form-control form-control-sm" placeholder="Contoh: minimal 3 orang">
             </div>
             <div class="col-12 mb-2">
-                <label class="form-label small">Destinasi yang Dikunjungi</label>
-                <textarea name="paket[${idx}][destinasi_kunjungi]" class="form-control form-control-sm" rows="3"
-                    placeholder="Satu destinasi per baris&#10;Contoh:&#10;Pantai Parangtritis&#10;Bukit Bintang&#10;Taman Sari"></textarea>
+                <label class="form-label small">Destinasi yang Dikunjungi <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][destinasi_kunjungi]" class="form-control form-control-sm" placeholder="Contoh: Pantai Parangtritis, Tebing Breksi, Hutan Pinus" required>
+                <small class="text-muted">Pisahkan setiap item dengan koma.</small>
             </div>
             <div class="col-12 mb-2">
-                <label class="form-label small">Fasilitas</label>
-                <textarea name="paket[${idx}][termasuk]" class="form-control form-control-sm" rows="3"
-                    placeholder="Satu item per baris&#10;Contoh:&#10;Guide lokal&#10;Tiket masuk&#10;Snack"></textarea>
+                <label class="form-label small">Fasilitas <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][termasuk]" class="form-control form-control-sm" placeholder="Contoh: Guide lokal, Snack, Air minum, Tiket masuk" required>
+                <small class="text-muted">Pisahkan setiap item dengan koma.</small>
             </div>
         </div>`;
     container.appendChild(div);

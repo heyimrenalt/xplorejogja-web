@@ -142,7 +142,7 @@
         {{-- Sosial Media Section --}}
        <div class="mb-16">
     <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
-        <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Our Sosial Media 
+        <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Sosial Media
     </h3>
     {{-- Grid 4 kolom: otomatis turun ke bawah jika lebih dari 4 item --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 border-t border-gray-100 pt-8">

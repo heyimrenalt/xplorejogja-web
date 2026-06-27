@@ -17,7 +17,7 @@
             </ul>
         </div>
         <div>
-            <h4 class="font-bold mb-4">Our Social Media</h4>
+            <h4 class="font-bold mb-4">Sosial Media</h4>
             <div class="flex gap-4 text-xl">
                 <a href="https://www.instagram.com/xplorejogjaku" target="_blank" rel="noopener noreferrer" class="hover:text-pink-500 transition-colors"><i class="fab fa-instagram"></i></a>
                 <a href="https://web.facebook.com/xplorejogjaku/" target="_blank" rel="noopener noreferrer" class="hover:text-blue-300 transition-colors"><i class="fab fa-facebook"></i></a>
