@@ -92,6 +92,58 @@
         </div>
         @endif
 
+        {{-- Paket Open Trip (hanya Ojek Wisata, category_id 22) --}}
+        @if($wisata->category_id == 22 && isset($pakets) && $pakets->isNotEmpty())
+        <div class="mb-16">
+            <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Paket Open Trip
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 border-t border-gray-100 pt-8">
+                @foreach($pakets->take(3) as $paket)
+                @php
+                $paketData = json_encode([
+                    'gambar'             => asset('images/' . $paket->gambar),
+                    'nama_paket'         => $paket->nama_paket,
+                    'lokasi'             => $paket->lokasi,
+                    'durasi'             => $paket->durasi,
+                    'transport'          => $paket->transport,
+                    'makan'              => $paket->makan,
+                    'harga'              => $paket->harga,
+                    'destinasi_kunjungi' => $paket->destinasi_kunjungi,
+                    'termasuk'           => $paket->termasuk,
+                    'tidak_termasuk'     => $paket->tidak_termasuk,
+                ]);
+                @endphp
+                <div class="rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer bg-white"
+                     data-paket="{{ e($paketData) }}"
+                     onclick="openPaketModal(JSON.parse(this.dataset.paket))">
+                    <div style="aspect-ratio:4/3; overflow:hidden;">
+                        <img src="{{ asset('images/' . $paket->gambar) }}"
+                             alt="{{ $paket->nama_paket }}"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-4">
+                        <p class="font-semibold text-gray-800 text-sm leading-snug">{{ $paket->nama_paket }}</p>
+                        @if($paket->harga)
+                        <p class="text-cyan-600 font-bold text-sm mt-1">Rp{{ number_format($paket->harga, 0, ',', '.') }}/orang</p>
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            @if($pakets->count() > 3)
+            <div class="mt-6 text-right">
+                <a href="{{ route('paket.index', ['wisata' => $wisata->slug]) }}"
+                   class="inline-flex items-center gap-2 text-cyan-600 font-bold text-sm hover:underline">
+                    Lihat semua paket <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            @endif
+        </div>
+        @include('partials.paket-modal')
+        @endif
+
         {{-- Sosial Media --}}
         @if($wisata->instagram || $wisata->whatsapp || $wisata->facebook || $wisata->twitter || $wisata->tiktok || $wisata->youtube)
         <div class="mb-16">

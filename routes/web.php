@@ -24,6 +24,9 @@ Route::get('/api/search', [PublicController::class, 'searchWisata'])->name('api.
 // Detail wisata publik
 Route::get('/destinasi/{slug}', [PublicController::class, 'detail'])->name('wisata.detail');
 
+// Paket Open Trip
+Route::get('/paket', [PublicController::class, 'paketOpenTrip'])->name('paket.index');
+
 // Ulasan publik
 Route::post('/destinasi/{slug}/ulasan', [UlasanController::class, 'store'])
     ->middleware('throttle:5,1')

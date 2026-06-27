@@ -258,6 +258,113 @@
                             </div>
                         </div>
                         
+                        {{-- PAKET OPEN TRIP --}}
+                        <div id="section-paket-open-trip" style="{{ $wisata->category_id == 22 ? '' : 'display:none;' }}">
+                            <hr class="my-4">
+                            <h6 class="mb-3" style="color:#0e7490; font-weight:700;">
+                                <i class="fas fa-route me-2"></i> Paket Open Trip
+                            </h6>
+
+                            {{-- Paket existing --}}
+                            @if($pakets->isNotEmpty())
+                            <div class="mb-3">
+                                <p class="small text-muted mb-2">Paket yang sudah tersimpan:</p>
+                                <div id="paket-existing-list">
+                                @foreach($pakets as $paket)
+                                <div class="border rounded p-3 mb-3 bg-white" id="paket-existing-row-{{ $paket->id }}">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong class="small" style="color:#0e7490;">{{ $paket->nama_paket }}</strong>
+                                        <button type="button" class="btn btn-danger btn-sm py-0 px-2"
+                                                onclick="hapusPaketExisting({{ $paket->id }})">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </button>
+                                    </div>
+                                    @if($paket->gambar)
+                                    <img src="{{ asset('images/' . $paket->gambar) }}"
+                                         class="img-thumbnail mb-2" style="height:80px; object-fit:cover;">
+                                    @endif
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Nama Paket</label>
+                                            <input type="text" name="paket_existing[{{ $paket->id }}][nama_paket]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.nama_paket', $paket->nama_paket) }}">
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Ganti Gambar</label>
+                                            <input type="file" name="paket_existing[{{ $paket->id }}][gambar]"
+                                                   class="form-control form-control-sm" accept="image/*">
+                                            <small class="text-muted">Kosongkan jika tidak ingin mengganti</small>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Lokasi</label>
+                                            <input type="text" name="paket_existing[{{ $paket->id }}][lokasi]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.lokasi', $paket->lokasi) }}"
+                                                   placeholder="Contoh: Yogyakarta - Merapi">
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label small">Durasi</label>
+                                            <input type="text" name="paket_existing[{{ $paket->id }}][durasi]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.durasi', $paket->durasi) }}"
+                                                   placeholder="3D2N">
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label small">Transport</label>
+                                            <input type="text" name="paket_existing[{{ $paket->id }}][transport]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.transport', $paket->transport) }}"
+                                                   placeholder="Elf AC">
+                                        </div>
+                                        <div class="col-md-2 mb-2">
+                                            <label class="form-label small">Makan</label>
+                                            <input type="text" name="paket_existing[{{ $paket->id }}][makan]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.makan', $paket->makan) }}"
+                                                   placeholder="5x">
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label class="form-label small">Harga (Rp/orang)</label>
+                                            <input type="number" name="paket_existing[{{ $paket->id }}][harga]"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ old('paket_existing.' . $paket->id . '.harga', $paket->harga) }}"
+                                                   placeholder="350000">
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <label class="form-label small">Destinasi yang Dikunjungi</label>
+                                            <textarea name="paket_existing[{{ $paket->id }}][destinasi_kunjungi]"
+                                                      class="form-control form-control-sm" rows="3"
+                                                      placeholder="Satu destinasi per baris">{{ old('paket_existing.' . $paket->id . '.destinasi_kunjungi', $paket->destinasi_kunjungi) }}</textarea>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Termasuk</label>
+                                            <textarea name="paket_existing[{{ $paket->id }}][termasuk]"
+                                                      class="form-control form-control-sm" rows="3"
+                                                      placeholder="Satu item per baris">{{ old('paket_existing.' . $paket->id . '.termasuk', $paket->termasuk) }}</textarea>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label small">Tidak Termasuk</label>
+                                            <textarea name="paket_existing[{{ $paket->id }}][tidak_termasuk]"
+                                                      class="form-control form-control-sm" rows="3"
+                                                      placeholder="Satu item per baris">{{ old('paket_existing.' . $paket->id . '.tidak_termasuk', $paket->tidak_termasuk) }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                                </div>
+                            </div>
+                            @endif
+
+                            {{-- Paket baru --}}
+                            <div id="paket-baru-list"></div>
+                            <button type="button" class="btn btn-sm mb-3"
+                                    style="background:#e0f2fe; color:#0e7490; border:1px dashed #0e7490;"
+                                    onclick="tambahPaketBaru()">
+                                <i class="fas fa-plus me-1"></i> + Tambah Paket Baru
+                            </button>
+                        </div>
+
                         <hr class="my-4">
                         <h6 class="text-primary fw-bold mb-3"><i class="fas fa-star me-2"></i> Manajemen Ulasan</h6>
 
@@ -451,7 +558,110 @@ if (savedParentId) {
 document.getElementById('parent_category').addEventListener('change', function() {
     fillSubCategory(this.value);
     applyJasaMode(this.value);
+    toggleSectionPaket(0); // reset saat ganti parent
 });
+
+document.getElementById('sub_category').addEventListener('change', function() {
+    toggleSectionPaket(this.value);
+});
+
+// --- Paket Open Trip ---
+var paketBaruCount = 0;
+var deletedPaketIds = [];
+
+function toggleSectionPaket(subCatId) {
+    var section = document.getElementById('section-paket-open-trip');
+    if (section) {
+        section.style.display = (subCatId == 22) ? '' : 'none';
+    }
+}
+
+function hapusPaketExisting(paketId) {
+    var row = document.getElementById('paket-existing-row-' + paketId);
+    if (row) {
+        row.style.display = 'none';
+        deletedPaketIds.push(paketId);
+        updateDeletedHiddenInputs();
+    }
+}
+
+function updateDeletedHiddenInputs() {
+    var container = document.getElementById('paket-deleted-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'paket-deleted-container';
+        document.querySelector('form').appendChild(container);
+    }
+    container.innerHTML = deletedPaketIds.map(function(id) {
+        return '<input type="hidden" name="paket_deleted[]" value="' + id + '">';
+    }).join('');
+}
+
+function tambahPaketBaru() {
+    var idx = paketBaruCount++;
+    var container = document.getElementById('paket-baru-list');
+    var div = document.createElement('div');
+    div.className = 'border rounded p-3 mb-3 bg-white';
+    div.id = 'paket-baru-row-' + idx;
+    div.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong class="small" style="color:#0e7490;">Paket Baru</strong>
+            <button type="button" class="btn btn-danger btn-sm py-0 px-2" onclick="hapusPaketBaruEdit(${idx})">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label class="form-label small">Nama Paket <span class="text-danger">*</span></label>
+                <input type="text" name="paket[${idx}][nama_paket]" class="form-control form-control-sm" placeholder="Contoh: Paket 3D2N Pantai" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label small">Gambar Paket <span class="text-danger">*</span></label>
+                <input type="file" name="paket[${idx}][gambar]" class="form-control form-control-sm" accept="image/*" required>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label small">Lokasi</label>
+                <input type="text" name="paket[${idx}][lokasi]" class="form-control form-control-sm" placeholder="Contoh: Yogyakarta - Merapi">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label small">Durasi</label>
+                <input type="text" name="paket[${idx}][durasi]" class="form-control form-control-sm" placeholder="3D2N">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label small">Transport</label>
+                <input type="text" name="paket[${idx}][transport]" class="form-control form-control-sm" placeholder="Elf AC">
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label small">Makan</label>
+                <input type="text" name="paket[${idx}][makan]" class="form-control form-control-sm" placeholder="5x">
+            </div>
+            <div class="col-md-4 mb-2">
+                <label class="form-label small">Harga (Rp/orang)</label>
+                <input type="number" name="paket[${idx}][harga]" class="form-control form-control-sm" placeholder="350000">
+            </div>
+            <div class="col-12 mb-2">
+                <label class="form-label small">Destinasi yang Dikunjungi</label>
+                <textarea name="paket[${idx}][destinasi_kunjungi]" class="form-control form-control-sm" rows="3"
+                    placeholder="Satu destinasi per baris&#10;Contoh:&#10;Pantai Parangtritis&#10;Bukit Bintang"></textarea>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label small">Termasuk</label>
+                <textarea name="paket[${idx}][termasuk]" class="form-control form-control-sm" rows="3"
+                    placeholder="Satu item per baris&#10;Contoh:&#10;Guide lokal&#10;Tiket masuk"></textarea>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label small">Tidak Termasuk</label>
+                <textarea name="paket[${idx}][tidak_termasuk]" class="form-control form-control-sm" rows="3"
+                    placeholder="Satu item per baris&#10;Contoh:&#10;Penginapan&#10;Biaya pribadi"></textarea>
+            </div>
+        </div>`;
+    container.appendChild(div);
+}
+
+function hapusPaketBaruEdit(idx) {
+    var row = document.getElementById('paket-baru-row-' + idx);
+    if (row) row.remove();
+}
 
 </script>
 

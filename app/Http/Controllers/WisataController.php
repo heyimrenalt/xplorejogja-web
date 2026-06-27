@@ -175,7 +175,7 @@ class WisataController extends Controller
             }
         }
 
-        $data = $request->except(['gambar1', 'gambar2', 'gambar3', 'ulasan_raw']);
+        $data = $request->except(['gambar1', 'gambar2', 'gambar3', 'ulasan_raw', 'paket']);
 
         if ($isJasa || $isKuliner) {
             $data['deskripsi']    = '';
@@ -203,6 +203,35 @@ class WisataController extends Controller
         }
 
         $wisata = Wisata::create($data);
+
+        // Handle paket open trip baru
+        $paketFiles = $request->file('paket') ?? [];
+        foreach ($request->input('paket', []) as $idx => $paketData) {
+            $nama = trim($paketData['nama_paket'] ?? '');
+            if (!$nama) continue;
+
+            $gambarFile = $paketFiles[$idx]['gambar'] ?? null;
+            if (!$gambarFile) continue;
+
+            $ext      = $gambarFile->getClientOriginalExtension();
+            $namaFile = \Illuminate\Support\Str::random(20) . '.' . $ext;
+            try {
+                $gambarFile->move(public_path('images'), $namaFile);
+                \App\Models\PaketWisata::create([
+                    'wisata_id'          => $wisata->id,
+                    'nama_paket'         => $nama,
+                    'gambar'             => $namaFile,
+                    'lokasi'             => $paketData['lokasi'] ?? null,
+                    'durasi'             => $paketData['durasi'] ?? null,
+                    'transport'          => $paketData['transport'] ?? null,
+                    'makan'              => $paketData['makan'] ?? null,
+                    'harga'              => !empty($paketData['harga']) ? (int) str_replace('.', '', $paketData['harga']) : null,
+                    'destinasi_kunjungi' => $paketData['destinasi_kunjungi'] ?? null,
+                    'termasuk'           => $paketData['termasuk'] ?? null,
+                    'tidak_termasuk'     => $paketData['tidak_termasuk'] ?? null,
+                ]);
+            } catch (\Throwable $e) {}
+        }
 
         if ($request->filled('ulasan_raw')) {
             $items = explode("\n", trim($request->ulasan_raw));
@@ -246,7 +275,8 @@ class WisataController extends Controller
             ->get();
         $populerCount = Wisata::where('is_populer', true)->where('id', '!=', $id)->count();
         $ulasans      = Ulasan::where('wisata_id', $id)->orderBy('urutan')->get();
-        return view('admin.edit', compact('wisata', 'categories', 'populerCount', 'ulasans'));
+        $pakets       = \App\Models\PaketWisata::where('wisata_id', $id)->latest()->get();
+        return view('admin.edit', compact('wisata', 'categories', 'populerCount', 'ulasans', 'pakets'));
     }
 
     public function update(Request $request, $id)
@@ -326,7 +356,7 @@ class WisataController extends Controller
             }
         }
 
-        $data = $request->except(['gambar1', 'gambar2', 'gambar3', '_token', '_method', 'ulasan_raw']);
+        $data = $request->except(['gambar1', 'gambar2', 'gambar3', '_token', '_method', 'ulasan_raw', 'paket', 'paket_existing', 'paket_deleted']);
 
         if ($isJasa || $isKuliner) {
             $data['deskripsi']    = '';
@@ -364,6 +394,82 @@ class WisataController extends Controller
 
         $wisata->update($data);
 
+        // Update paket existing
+        $paketExistingFiles = $request->file('paket_existing') ?? [];
+        foreach ($request->input('paket_existing', []) as $paketId => $paketData) {
+            $paket = \App\Models\PaketWisata::where('id', $paketId)
+                        ->where('wisata_id', $wisata->id)->first();
+            if (!$paket) continue;
+
+            $updateData = [
+                'nama_paket'         => $paketData['nama_paket'] ?? $paket->nama_paket,
+                'lokasi'             => $paketData['lokasi'] ?? null,
+                'durasi'             => $paketData['durasi'] ?? null,
+                'transport'          => $paketData['transport'] ?? null,
+                'makan'              => $paketData['makan'] ?? null,
+                'harga'              => !empty($paketData['harga']) ? (int) str_replace('.', '', $paketData['harga']) : null,
+                'destinasi_kunjungi' => $paketData['destinasi_kunjungi'] ?? null,
+                'termasuk'           => $paketData['termasuk'] ?? null,
+                'tidak_termasuk'     => $paketData['tidak_termasuk'] ?? null,
+            ];
+
+            $gambarFile = $paketExistingFiles[$paketId]['gambar'] ?? null;
+            if ($gambarFile) {
+                if ($paket->gambar) {
+                    $oldPath = public_path('images/' . $paket->gambar);
+                    if (file_exists($oldPath) && is_file($oldPath)) {
+                        try { @unlink($oldPath); } catch (\Throwable $e) {}
+                    }
+                }
+                $ext      = $gambarFile->getClientOriginalExtension();
+                $namaFile = \Illuminate\Support\Str::random(20) . '.' . $ext;
+                try {
+                    $gambarFile->move(public_path('images'), $namaFile);
+                    $updateData['gambar'] = $namaFile;
+                } catch (\Throwable $e) {}
+            }
+
+            $paket->update($updateData);
+        }
+
+        // Hapus paket yang di-mark deleted
+        foreach ($request->input('paket_deleted', []) as $paketId) {
+            $paket = \App\Models\PaketWisata::where('id', $paketId)
+                        ->where('wisata_id', $wisata->id)->first();
+            if ($paket) {
+                $paket->delete(); // booted() deleting event handles file unlink
+            }
+        }
+
+        // Tambah paket baru
+        $paketFiles = $request->file('paket') ?? [];
+        foreach ($request->input('paket', []) as $idx => $paketData) {
+            $nama = trim($paketData['nama_paket'] ?? '');
+            if (!$nama) continue;
+
+            $gambarFile = $paketFiles[$idx]['gambar'] ?? null;
+            if (!$gambarFile) continue;
+
+            $ext      = $gambarFile->getClientOriginalExtension();
+            $namaFile = \Illuminate\Support\Str::random(20) . '.' . $ext;
+            try {
+                $gambarFile->move(public_path('images'), $namaFile);
+                \App\Models\PaketWisata::create([
+                    'wisata_id'          => $wisata->id,
+                    'nama_paket'         => $nama,
+                    'gambar'             => $namaFile,
+                    'lokasi'             => $paketData['lokasi'] ?? null,
+                    'durasi'             => $paketData['durasi'] ?? null,
+                    'transport'          => $paketData['transport'] ?? null,
+                    'makan'              => $paketData['makan'] ?? null,
+                    'harga'              => !empty($paketData['harga']) ? (int) str_replace('.', '', $paketData['harga']) : null,
+                    'destinasi_kunjungi' => $paketData['destinasi_kunjungi'] ?? null,
+                    'termasuk'           => $paketData['termasuk'] ?? null,
+                    'tidak_termasuk'     => $paketData['tidak_termasuk'] ?? null,
+                ]);
+            } catch (\Throwable $e) {}
+        }
+
         if ($request->filled('ulasan_raw')) {
             $items = explode("\n", trim($request->ulasan_raw));
             foreach ($items as $item) {
@@ -400,6 +506,11 @@ class WisataController extends Controller
     public function destroy($id)
     {
         $wisata = Wisata::findOrFail($id);
+
+        // Delete paket via Eloquent so booted() deleting event fires (file cleanup)
+        foreach ($wisata->paketWisatas as $paket) {
+            $paket->delete();
+        }
 
         foreach (['gambar1', 'gambar2', 'gambar3'] as $img) {
             if ($wisata->$img) {

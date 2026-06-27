@@ -126,7 +126,30 @@ public function detail($slug)
     $totalUlasan = $stats->total ?? 0;
     $rataRating  = $stats->avg_rating ? round($stats->avg_rating, 1) : 0;
 
-    return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent'));
+    $pakets = collect();
+    if ($wisata->category_id == 22) {
+        $pakets = \App\Models\PaketWisata::where('wisata_id', $wisata->id)->latest()->get();
+    }
+
+    return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent', 'pakets'));
+}
+
+public function paketOpenTrip(Request $request)
+{
+    $wisataSlug = $request->query('wisata');
+    $wisata = null;
+
+    if ($wisataSlug) {
+        $wisata = \App\Models\Wisata::where('slug', $wisataSlug)->first();
+    }
+
+    $query = \App\Models\PaketWisata::with('wisata');
+    if ($wisata) {
+        $query->where('wisata_id', $wisata->id);
+    }
+    $pakets = $query->latest()->get();
+
+    return view('paket', compact('pakets', 'wisata'));
 }
 public function hiburanKel()
 {
