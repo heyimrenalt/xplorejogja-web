@@ -99,24 +99,24 @@
                 <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Paket Open Trip
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 border-t border-gray-100 pt-8">
-                @foreach($pakets->take(3) as $paket)
-                @php
-                $paketData = json_encode([
-                    'gambar'             => asset('images/' . $paket->gambar),
-                    'nama_paket'         => $paket->nama_paket,
-                    'lokasi'             => $paket->lokasi,
-                    'durasi'             => $paket->durasi,
-                    'transport'          => $paket->transport,
-                    'makan'              => $paket->makan,
-                    'harga'              => $paket->harga,
-                    'destinasi_kunjungi' => $paket->destinasi_kunjungi,
-                    'termasuk'           => $paket->termasuk,
-                    'tidak_termasuk'     => $paket->tidak_termasuk,
-                ]);
-                @endphp
-                <div class="rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer bg-white"
-                     data-paket="{{ e($paketData) }}"
-                     onclick="openPaketModal(JSON.parse(this.dataset.paket))">
+                @foreach($pakets as $paket)
+@php
+$paketData = json_encode([
+    'gambar'             => asset('images/' . $paket->gambar),
+    'nama_paket'         => $paket->nama_paket,
+    'lokasi'             => $paket->lokasi,
+    'durasi'             => $paket->durasi,
+    'transport'          => $paket->transport,
+    'makan'              => $paket->makan,
+    'harga'              => $paket->harga,
+    'destinasi_kunjungi' => $paket->destinasi_kunjungi,
+    'termasuk'           => $paket->termasuk,
+    'tidak_termasuk'     => $paket->tidak_termasuk,
+], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+@endphp
+<div class="rounded-2xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer bg-white"
+data-paket='{!! $paketData !!}'
+onclick="openPaketModal(JSON.parse(this.dataset.paket))">
                     <div style="aspect-ratio:4/3; overflow:hidden;">
                         <img src="{{ asset('images/' . $paket->gambar) }}"
                              alt="{{ $paket->nama_paket }}"
