@@ -89,7 +89,13 @@ class WisataController extends Controller
     public function create()
     {
         $populerCount = Wisata::where('is_populer', true)->count();
-        return view('admin.create', compact('populerCount'));
+        $subKategoriMap = \App\Models\Category::whereNotNull('parent_id')
+            ->with('parent:id,name')
+            ->orderBy('id')
+            ->get()
+            ->groupBy(fn($sub) => $sub->parent->name ?? 'Lainnya')
+            ->map(fn($subs) => $subs->map(fn($s) => ['id' => $s->id, 'name' => $s->name])->values());
+        return view('admin.create', compact('populerCount', 'subKategoriMap'));
     }
 
     public function store(Request $request)

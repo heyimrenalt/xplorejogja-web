@@ -337,36 +337,7 @@ function escapeHtml(str) {
 
 // 1. Logika Kategori Bertingkat
 // 1. Logika Kategori Bertingkat - sesuai database sekarang
-const subCategories = {
-    'Wisata Alam': [
-        {id: 2, name: 'Wisata Pantai'},
-        {id: 3, name: 'Wisata Air Terjun'},
-        {id: 4, name: 'Wisata Sungai/Waduk'},
-        {id: 5, name: 'Wisata Hutan'},
-        {id: 6, name: 'Wisata Pegunungan/Bukit'},
-        {id: 7, name: 'Wisata Goa'}
-    ],
-    'Hiburan Keluarga': [
-        {id: 9, name: 'Taman Bermain'},
-        {id: 10, name: 'Wahana Air'},
-        {id: 11, name: 'Kebun Binatang'}
-    ],
-    'Penginapan': [
-        {id: 16, name: 'Hotel'},
-        {id: 17, name: 'Villa'},
-        {id: 18, name: 'Homestay'}
-    ],
-    'Transportasi': [
-        {id: 20, name: 'Sewa Motor'},
-        {id: 21, name: 'Sewa Mobil'},
-        {id: 22, name: 'Ojek Wisata'}
-    ],
-    'Kuliner': [
-        {id: 24, name: 'Cafe & Resto'},
-        {id: 25, name: 'Kuliner Tradisional'},
-        {id: 26, name: 'Street Food'}
-    ],
-};
+const subCategories = @json($subKategoriMap);
 
 function applyJasaMode(parentName) {
     const isJasa    = parentName === 'Penginapan' || parentName === 'Transportasi';
