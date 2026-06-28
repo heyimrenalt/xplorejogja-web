@@ -358,9 +358,9 @@
                         </div>
                         <input type="hidden" name="ulasan_raw" id="ulasan_raw">
 
-                        <input type="hidden" name="redirect_to" value="{{ session('admin_back_url', route('admin')) }}">
+                        <input type="hidden" name="redirect_to" value="{{ request('back_tab') ? route('admin') . '?tab=' . request('back_tab') : (session('admin_back_url') ?? route('admin')) }}">
                         <div class="d-flex justify-content-end gap-2 pt-3">
-                            <a href="{{ session('admin_back_url', route('admin')) }}" class="btn btn-secondary px-4">Batal</a>
+                            <a href="{{ request('back_tab') ? route('admin') . '?tab=' . request('back_tab') : (session('admin_back_url') ?? route('admin')) }}" class="btn btn-secondary px-4">Batal</a>
                             <button type="submit" class="btn btn-success px-5">Simpan Wisata</button>
                         </div>
                     </form>

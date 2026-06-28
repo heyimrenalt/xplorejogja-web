@@ -274,7 +274,7 @@
                 <h6 class="fw-bold mb-0">
                     <i class="fas fa-newspaper me-2 text-success"></i> Blog & Informasi
                 </h6>
-                <a href="{{ route('blog.create') }}" class="btn btn-success btn-sm">
+                <a href="{{ route('blog.create') }}?back_tab=blog" class="btn btn-success btn-sm">
                     <i class="fas fa-plus me-1"></i> Tambah Artikel
                 </a>
             </div>
@@ -360,7 +360,7 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-1">
-                                                    <a href="{{ route('blog.edit', $blog->id) }}"
+                                                    <a href="{{ route('blog.edit', $blog->id) }}?back_tab=blog"
                                                         class="btn btn-sm btn-warning" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
@@ -431,7 +431,7 @@
                             <div class="fw-semibold small">{{ $wp->nama_wisata }}</div>
                             <span class="badge bg-primary" style="font-size:10px;">{{ $wp->category->name ?? '-' }}</span>
                         </div>
-                        <a href="{{ route('wisata.edit', $wp->id) }}"
+                        <a href="{{ route('wisata.edit', $wp->id) }}?back_tab=populer"
                             class="btn btn-sm btn-outline-warning" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
@@ -691,6 +691,9 @@ var tabItems  = document.querySelectorAll('.tab-item[data-tab]');
 var tabPanels = document.querySelectorAll('.tab-content-panel');
 
 function switchTab(tab) {
+    var validTabs = ['pamflet', 'populer', 'blog', 'ulasan'];
+    if (!tab || validTabs.indexOf(tab) === -1) { tab = 'pamflet'; }
+
     var targetId = 'tab-' + tab;
     tabItems.forEach(function(t) { t.classList.remove('active'); });
     tabPanels.forEach(function(p) { p.classList.remove('active'); });
@@ -702,6 +705,10 @@ function switchTab(tab) {
     if (panel) { panel.classList.add('active'); }
 
     saveLastTab(tab);
+
+    var url = new URL(window.location);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState({}, '', url);
 }
 
 tabItems.forEach(function(item) {

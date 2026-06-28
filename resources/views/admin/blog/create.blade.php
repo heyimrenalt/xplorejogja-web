@@ -94,7 +94,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 pt-3">
-                            <a href="{{ session('admin_back_url', route('admin')) }}" class="btn btn-secondary px-4">Batal</a>
+                            <a href="{{ request('back_tab') ? route('admin') . '?tab=' . request('back_tab') : (session('admin_back_url') ?? route('admin')) }}" class="btn btn-secondary px-4">Batal</a>
                             <button type="submit" class="btn btn-success px-5">
                                 <i class="fas fa-save me-1"></i> Simpan Artikel
                             </button>
