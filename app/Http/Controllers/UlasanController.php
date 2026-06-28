@@ -74,8 +74,8 @@ class UlasanController extends Controller
     ];
 
     try {
-        if (!is_dir(storage_path('app/public/ulasan'))) {
-            @mkdir(storage_path('app/public/ulasan'), 0775, true);
+        if (!is_dir(public_path('images/ulasan'))) {
+            @mkdir(public_path('images/ulasan'), 0775, true);
         }
     } catch (\Throwable $e) {}
 
@@ -84,7 +84,7 @@ foreach (['foto1', 'foto2', 'foto3'] as $foto) {
         $file     = $request->file($foto);
         $namaFile = time() . '_ulasan_' . $foto . '_' . $file->getClientOriginalName();
         try {
-            $file->move(storage_path('app/public/ulasan'), $namaFile);
+            $file->move(public_path('images/ulasan'), $namaFile);
             $data[$foto] = $namaFile;
         } catch (\Exception $e) {
             // foto gagal diupload, ulasan tetap tersimpan tanpa foto ini
@@ -143,7 +143,7 @@ foreach (['foto1', 'foto2', 'foto3'] as $foto) {
 
         foreach (['foto1', 'foto2', 'foto3'] as $foto) {
             if ($ulasan->$foto) {
-                $path = storage_path('app/public/ulasan/' . $ulasan->$foto);
+                $path = public_path('images/ulasan/' . $ulasan->$foto);
                 if (file_exists($path) && is_file($path)) {
                     try { @unlink($path); } catch (\Throwable $e) {}
                 }

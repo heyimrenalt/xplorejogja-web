@@ -23,7 +23,7 @@
     <div class="flex gap-2">
         @foreach(['foto1','foto2','foto3'] as $foto)
     @if($ulasan->$foto)
-    <img src="{{ asset('storage/ulasan/' . $ulasan->$foto) }}"
+    <img src="{{ asset('images/ulasan/' . $ulasan->$foto) }}"
          class="w-20 h-20 object-cover rounded-xl border border-gray-100 cursor-pointer"
          onclick="window.open(this.src)">
     @endif
