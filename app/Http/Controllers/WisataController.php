@@ -149,7 +149,7 @@ class WisataController extends Controller
 
         if (!empty($request->input('paket'))) {
             $rules['paket.*.nama_paket']         = 'required|string|max:255';
-            $rules['paket.*.gambar']             = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['paket.*.gambar']             = 'required|image|mimes:jpeg,png,jpg|max:10240';
             $rules['paket.*.lokasi']             = 'required|string';
             $rules['paket.*.durasi']             = 'required|string';
             $rules['paket.*.transport']          = 'required|string';
@@ -380,7 +380,7 @@ class WisataController extends Controller
 
         if (!empty($request->input('paket'))) {
             $rules['paket.*.nama_paket']         = 'required|string|max:255';
-            $rules['paket.*.gambar']             = 'required|image|mimes:jpeg,png,jpg|max:2048';
+            $rules['paket.*.gambar']             = 'required|image|mimes:jpeg,png,jpg|max:10240';
             $rules['paket.*.lokasi']             = 'required|string';
             $rules['paket.*.durasi']             = 'required|string';
             $rules['paket.*.transport']          = 'required|string';
