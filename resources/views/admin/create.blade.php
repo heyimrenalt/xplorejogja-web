@@ -360,7 +360,7 @@
 
                         <input type="hidden" name="redirect_to" value="{{ old('redirect_to', url()->previous()) }}">
                         <div class="d-flex justify-content-end gap-2 pt-3">
-                            <a href="{{ route('admin') }}" class="btn btn-secondary px-4">Batal</a>
+                            <a href="{{ url()->previous() != url()->current() ? url()->previous() : route('admin') }}" class="btn btn-secondary px-4">Batal</a>
                             <button type="submit" class="btn btn-success px-5">Simpan Wisata</button>
                         </div>
                     </form>

@@ -20,9 +20,9 @@
 
     {{-- Back + Judul --}}
     <div class="mb-8">
-        <a href="{{ route('home') }}"
+        <a href="{{ url()->previous() }}"
            class="inline-flex items-center gap-2 text-cyan-600 font-semibold text-sm hover:underline mb-4">
-            <i class="fas fa-arrow-left text-xs"></i> Kembali ke Beranda
+            <i class="fas fa-arrow-left text-xs"></i> Kembali
         </a>
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
             @if($wisata)
@@ -84,18 +84,6 @@ onclick="openPaketModal(JSON.parse(this.dataset.paket))">
                 <p class="text-gray-400 text-xs italic mt-0.5">{{ $paket->keterangan_harga }}</p>
                 @endif
                 @endif
-                <div class="flex flex-wrap gap-2 mt-2">
-                    @if($paket->durasi)
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                        <i class="fas fa-clock text-cyan-500 mr-1"></i>{{ $paket->durasi }}
-                    </span>
-                    @endif
-                    @if($paket->transport)
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                        <i class="fas fa-car-side text-cyan-500 mr-1"></i>{{ $paket->transport }}
-                    </span>
-                    @endif
-                </div>
             </div>
         </div>
         @endforeach

@@ -139,7 +139,7 @@ onclick="openPaketModal(JSON.parse(this.dataset.paket))">
                 @endforeach
             </div>
 
-            @if($pakets->count() > 3)
+            @if(isset($totalPaket) && $totalPaket > 3)
             <div class="mt-6 text-right">
                 <a href="{{ route('paket.index', ['wisata' => $wisata->slug]) }}"
                    class="inline-flex items-center gap-2 text-cyan-600 font-bold text-sm hover:underline">

@@ -102,7 +102,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 pt-3">
-                            <a href="{{ route('admin') }}" class="btn btn-secondary px-4">Batal</a>
+                            <a href="{{ url()->previous() != url()->current() ? url()->previous() : route('admin') }}" class="btn btn-secondary px-4">Batal</a>
                             <button type="submit" class="btn btn-warning px-5 fw-bold">
                                 <i class="fas fa-save me-1"></i> Update Artikel
                             </button>

@@ -127,11 +127,15 @@ public function detail($slug)
     $rataRating  = $stats->avg_rating ? round($stats->avg_rating, 1) : 0;
 
     $pakets = collect();
+    $paketsPreview = collect();
+    $totalPaket = 0;
     if ($wisata->category_id == 22) {
-        $pakets = \App\Models\PaketWisata::where('wisata_id', $wisata->id)->with('images')->latest()->get();
+        $totalPaket = \App\Models\PaketWisata::where('wisata_id', $wisata->id)->count();
+        $paketsPreview = \App\Models\PaketWisata::where('wisata_id', $wisata->id)->with('images')->latest()->take(3)->get();
+        $pakets = $paketsPreview;
     }
 
-    return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent', 'pakets'));
+    return view($view, compact('wisata', 'related', 'labelHarga', 'ulasans', 'totalUlasan', 'rataRating', 'current_parent', 'pakets', 'paketsPreview', 'totalPaket'));
 }
 
 public function paketOpenTrip(Request $request)
