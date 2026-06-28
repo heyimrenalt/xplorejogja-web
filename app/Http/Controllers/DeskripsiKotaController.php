@@ -8,6 +8,8 @@ class DeskripsiKotaController extends Controller
 {
     public function edit()
     {
+        //session(['admin_back_url' => request()->fullUrl()]);
+
         $deskripsi = \App\Models\DeskripsiKota::first();
         if (!$deskripsi) {
             $deskripsi = \App\Models\DeskripsiKota::create([

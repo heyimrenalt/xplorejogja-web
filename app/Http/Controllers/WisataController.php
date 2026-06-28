@@ -13,6 +13,8 @@ class WisataController extends Controller
 {
     public function index()
     {
+        session(['admin_back_url' => request()->fullUrl()]);
+
         $countWisataAlam   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 1); })->count();
         $countHiburanKel   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 8); })->count();
         $countPenginapan   = Wisata::whereHas('category', function($q) { $q->where('parent_id', 15); })->count();
@@ -727,6 +729,8 @@ class WisataController extends Controller
 
     public function indexByKategori($parentId)
     {
+        session(['admin_back_url' => request()->fullUrl()]);
+
         $parentCategory = \App\Models\Category::findOrFail($parentId);
         $subKategoris   = \App\Models\Category::where('parent_id', $parentId)
                             ->with(['wisatas' => function ($q) {

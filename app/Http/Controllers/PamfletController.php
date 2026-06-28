@@ -9,6 +9,8 @@ class PamfletController extends Controller
 {
     public function index()
     {
+        session(['admin_back_url' => request()->fullUrl()]);
+
         $pamflets = Pamflet::orderBy('urutan')->get();
         return response()->view('admin.pamflet.index', compact('pamflets'))
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate')

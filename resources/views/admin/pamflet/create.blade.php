@@ -92,9 +92,9 @@
                             <img id="preview-img" src="" style="max-height:200px; border-radius:8px; border:1px solid #dee2e6;">
                         </div>
 
-                        <input type="hidden" name="redirect_to" value="{{ old('redirect_to', url()->previous()) }}">
+                        <input type="hidden" name="redirect_to" value="{{ session('admin_back_url', route('pamflet.index')) }}">
                         <div class="d-flex justify-content-end gap-2 pt-3">
-                            <a href="{{ url()->previous() != url()->current() ? url()->previous() : route('pamflet.index') }}" class="btn btn-secondary px-4">Batal</a>
+                            <a href="{{ session('admin_back_url', route('pamflet.index')) }}" class="btn btn-secondary px-4">Batal</a>
                             <button type="submit" class="btn btn-success px-5" {{ $count >= 7 ? 'disabled' : '' }}>
                                 <i class="fas fa-save me-1"></i> Simpan Pamflet
                             </button>

@@ -15,6 +15,8 @@ class UlasanController extends Controller
 
     public function indexByKategori($parentId)
     {
+        session(['admin_back_url' => request()->fullUrl()]);
+
         $parentCategory = \App\Models\Category::findOrFail($parentId);
         $subKategoris = \App\Models\Category::where('parent_id', $parentId)->get();
 
@@ -155,6 +157,8 @@ foreach (['foto1', 'foto2', 'foto3'] as $foto) {
 
     public function show($id)
     {
+        //session(['admin_back_url' => request()->fullUrl()]);
+
         $ulasan = Ulasan::with('wisata')->findOrFail($id);
         return view('admin.ulasan-detail', compact('ulasan'));
     }
