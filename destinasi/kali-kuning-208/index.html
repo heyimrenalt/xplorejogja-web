@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Kali Kuning - XPloreJogja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .swiper-pagination-bullet { background: #ffffff !important; opacity: 0.7; }
+        .swiper-pagination-bullet-active { background: #0891b2 !important; opacity: 1; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<nav class="bg-cyan-700 shadow-sm sticky top-0 z-50 overflow-visible">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="https://heyimrenalt.github.io/xplorejogja-web" class="text-2xl font-bold text-white">XPloreJogja</a>
+        <div class="hidden md:block flex-1 max-w-xl mx-10">
+            <div class="relative">
+                <input type="text" id="inputSearch" placeholder="Cari Destinasi" class="w-full pl-4 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                <div id="hasilSearch" class="absolute left-0 right-0 bg-white shadow-xl rounded-lg mt-2 hidden z-50 border border-gray-100 overflow-hidden"></div>
+            </div>
+        </div>
+        <div class="relative" id="nav-kategori-wrapper-dinamis">
+            <button id="btn-dropdown-dinamis" class="flex items-center gap-2 font-medium text-white hover:text-white/80">
+                Kategori <i class="fas fa-chevron-down text-xs text-white ml-1" aria-hidden="true"></i>
+            </button>
+            <div id="dropdown-kategori-dinamis" class="absolute right-0 w-52 bg-white shadow-xl rounded-2xl py-2 hidden border border-gray-100 overflow-hidden">
+                
+                                    <a href="https://heyimrenalt.github.io/xplorejogja-web/sub-kategori/2"
+                       class="block px-4 py-2 transition-colors duration-200
+                       hover:bg-cyan-50 hover:text-cyan-600 text-gray-700">
+                       Wisata Pantai
+                    </a>
+                                    <a href="https://heyimrenalt.github.io/xplorejogja-web/sub-kategori/3"
+                       class="block px-4 py-2 transition-colors duration-200
+                       hover:bg-cyan-50 hover:text-cyan-600 text-gray-700">
+                       Wisata Air Terjun
+                    </a>
+                                    <a href="https://heyimrenalt.github.io/xplorejogja-web/sub-kategori/4"
+                       class="block px-4 py-2 transition-colors duration-200
+                       bg-cyan-600 text-white hover:bg-cyan-50 hover:text-cyan-600">
+                       Wisata Sungai/Waduk
+                    </a>
+                                    <a href="https://heyimrenalt.github.io/xplorejogja-web/sub-kategori/5"
+                       class="block px-4 py-2 transition-colors duration-200
+                       hover:bg-cyan-50 hover:text-cyan-600 text-gray-700">
+                       Wisata Hutan
+                    </a>
+                                    <a href="https://heyimrenalt.github.io/xplorejogja-web/sub-kategori/6"
+                       class="block px-4 py-2 transition-colors duration-200
+                       hover:bg-cyan-50 hover:text-cyan-600 text-gray-700">
+                       Wisata Pegunungan/Bukit
+                    </a>
+                                    <a href="https://heyimrenalt.github.io/xplorejogja-web/sub-kategori/7"
+                       class="block px-4 py-2 transition-colors duration-200
+                       hover:bg-cyan-50 hover:text-cyan-600 text-gray-700">
+                       Wisata Goa
+                    </a>
+                            </div>
+        </div>
+    </div>
+</nav>
+<script>
+(function() {
+    var wrapper = document.getElementById('nav-kategori-wrapper-dinamis');
+    var btn     = document.getElementById('btn-dropdown-dinamis');
+    var menu    = document.getElementById('dropdown-kategori-dinamis');
+    if (!wrapper || !btn || !menu) return;
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+    });
+    document.addEventListener('click', function() {
+        menu.classList.add('hidden');
+    });
+    menu.addEventListener('click', function(e) { e.stopPropagation(); });
+    wrapper.addEventListener('mouseenter', function() { menu.classList.remove('hidden'); });
+    wrapper.addEventListener('mouseleave', function() { menu.classList.add('hidden'); });
+})();
+</script>
+
+<div class="md:hidden px-4 py-2 bg-white border-b border-gray-100">
+    <div class="relative">
+        <input type="text" id="inputSearchMobile" placeholder="Cari Destinasi..."
+               class="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500">
+        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400 text-sm"></i>
+        <div id="hasilSearchMobile" class="absolute left-0 right-0 bg-white shadow-xl rounded-lg mt-1 hidden z-50 border border-gray-100 overflow-hidden"></div>
+    </div>
+</div>
+
+    <main class="container mx-auto px-6 py-10 max-w-5xl">
+        
+        <section class="w-full mx-auto py-8 relative !max-w-[1080px]"> 
+            <div class="swiper myHeroSwiper rounded-2xl overflow-hidden shadow-lg h-[220px] sm:h-[320px] md:h-[450px]">
+                <div class="swiper-wrapper">
+                                                                    <div class="swiper-slide relative">
+                            <img src="https://heyimrenalt.github.io/xplorejogja-web/images/1778205804_gambar1_sunga1.jpg" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        </div>
+                                                                                            <div class="swiper-slide relative">
+                            <img src="https://heyimrenalt.github.io/xplorejogja-web/images/1778205804_gambar2_sungai2.jpg" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        </div>
+                                                                                            <div class="swiper-slide relative">
+                            <img src="https://heyimrenalt.github.io/xplorejogja-web/images/1778205804_gambar3_sungai3.jpg" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                        </div>
+                                                            </div>
+                <div class="swiper-pagination !bottom-6"></div>
+            </div>
+        </section>
+
+        <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-8">Kali Kuning</h1>
+
+        <div class="bg-white p-5 md:p-10 rounded-3xl shadow-sm border border-gray-100 mb-8 md:mb-12">
+            <p class="text-justify text-sm md:text-base leading-relaxed text-gray-600">
+                Kali Kuning merupakan salah satu destinasi wisata alam di Yogyakarta yang terletak di kawasan lereng Gunung Merapi. Tempat ini menawarkan suasana sejuk dengan aliran sungai yang jernih, pepohonan hijau, dan pemandangan alam yang menenangkan. Kali Kuning dikenal sebagai lokasi favorit untuk camping, tracking, piknik, hingga kegiatan outbound karena memiliki area terbuka yang luas dan udara yang segar. Selain itu, wisata ini juga menjadi salah satu spot terbaik untuk menikmati panorama Gunung Merapi dari jarak yang cukup dekat. Keindahan alamnya yang masih asri membuat Kali Kuning cocok dijadikan tempat healing dan melepas penat dari suasana perkotaan.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
+            <div class="border-l-4 border-cyan-100 pl-6">
+                <h3 class="font-bold border-b-2 border-gray-800 w-fit mb-5 pb-1">Operasional</h3>
+                <div class="inline-flex w-fit bg-cyan-600 text-white rounded-xl overflow-hidden text-center text-sm shadow-md">
+                    <div class="py-3 px-5 border-r border-cyan-500 italic">Buka<br>06:00 WIB</div>
+                    <div class="py-3 px-5 italic">Tutup<br>17:00 WIB</div>
+                </div>
+                            </div>
+
+            <div class="border-l-4 border-cyan-100 pl-6">
+                <h3 class="font-bold border-b-2 border-gray-800 w-fit mb-5 pb-1">Harga Tiket</h3>
+                <div class="inline-block w-fit bg-cyan-600 text-white py-3 px-6 rounded-xl text-sm font-bold mb-3 shadow-md">
+                    Rp. 5000
+                </div>
+                            </div>
+
+            <div class="border-l-4 border-cyan-100 pl-6">
+                <h3 class="font-bold border-b-2 border-gray-800 w-fit mb-5 pb-1">Lokasi</h3>
+                <div class="inline-flex w-fit max-w-full bg-cyan-600 text-white p-4 rounded-xl gap-3 text-sm items-start italic shadow-md">
+                    <i class="fas fa-map-marker-alt mt-1 shrink-0"></i>
+                    <p class="break-words min-w-0">Kaliurang, Yogyakarta</p>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <a href="https://maps.app.goo.gl/dMhqav8cY6adt8Ss7" target="_blank" class="text-cyan-600 font-bold text-sm hover:underline flex items-center gap-2 group">
+                        Navigasi <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+ 
+        <div class="mb-16">
+            <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Fasilitas 
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 text-sm border-t border-gray-100 pt-8">
+                
+                <!-- Area Parkir -->
+                <div class="space-y-3">
+                    <p class="font-bold flex items-center gap-2 text-gray-800">
+                        <i class="fas fa-check-circle text-cyan-600 text-lg"></i> Area Parkir
+                    </p>
+                    <ul class="text-xs text-gray-500 ml-7 space-y-1.5 italic">
+                                                                                                                        <li><i class='fas fa-chevron-right text-[9px] mr-1'></i> Motor=Rp. 2000</li>
+                                                                                                                                <li><i class='fas fa-chevron-right text-[9px] mr-1'></i> Mobil=RP. 5000</li>
+                                                                                                        </ul>
+                </div>
+
+                <!-- Fasilitas Lainnya (Dinamis dari Input 'Fasilitas' dipisah koma, support format Nama=Rincian) -->
+                                                                                                            <div class="space-y-3">
+                            <p class="font-bold flex items-center gap-2 text-gray-800">
+                                <i class="fas fa-check-circle text-cyan-600 text-lg"></i> Kamar Mandi Umum
+                            </p>
+                                                        <ul class="text-xs text-gray-500 ml-7 space-y-1.5 italic">
+                                <li><i class='fas fa-chevron-right text-[9px] mr-1'></i> Rp. 2000</li>
+                            </ul>
+                                                    </div>
+                                                                                                                    <div class="space-y-3">
+                            <p class="font-bold flex items-center gap-2 text-gray-800">
+                                <i class="fas fa-check-circle text-cyan-600 text-lg"></i> Tim sar
+                            </p>
+                                                    </div>
+                                                                        </div>
+        </div>
+
+        
+       <div class="mb-16">
+    <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+        <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Sosial Media
+    </h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 border-t border-gray-100 pt-8">
+        
+        
+                <div class="flex items-center gap-3 text-sm text-gray-600 bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <i class="fab fa-instagram text-xl text-pink-500"></i> 
+            <span class="font-medium">@kalikuningyk</span>
+        </div>
+        
+        
+                <div class="flex items-center gap-3 text-sm text-gray-600 bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <i class="fas fa-phone-alt text-lg text-green-500"></i> 
+            <span class="font-medium">081234567891</span>
+        </div>
+        
+        
+                <div class="flex items-center gap-3 text-sm text-gray-600 bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <i class="fab fa-facebook text-xl text-blue-600"></i> 
+            <span class="font-medium">@kalikuningyk</span>
+        </div>
+        
+        
+                <div class="flex items-center gap-3 text-sm text-gray-600 bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <i class="fab fa-twitter text-xl text-cyan-400"></i> 
+            <span class="font-medium">@kalikuningyk</span>
+        </div>
+        
+        
+                <div class="flex items-center gap-3 text-sm text-gray-600 bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <i class="fab fa-tiktok text-xl text-black"></i> 
+            <span class="font-medium">@kalikuningyk</span>
+        </div>
+        
+        
+                <div class="flex items-center gap-3 text-sm text-gray-600 bg-white p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+            <i class="fab fa-youtube text-xl text-red-600"></i> 
+            <span class="font-medium">@kalikuningyk</span>
+        </div>
+        
+    </div>
+</div>
+
+        
+        <div class="mb-16">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                <span class="w-8 h-1 bg-cyan-600 rounded-full"></span> Ulasan
+            </h3>
+
+            
+            <div id="daftar-ulasan" class="flex flex-col gap-4 mb-4">
+                <div class="text-center py-8 text-gray-400">
+    <i class="fas fa-comment-slash fa-2x mb-2"></i>
+    <p class="text-sm">Belum ada ulasan untuk destinasi ini.</p>
+</div>
+            </div>
+
+            
+            
+            <div class="border-t border-gray-100 pt-8">
+                <h4 class="text-lg font-bold text-gray-800 mb-5">Tulis Ulasan</h4>
+                <form action="https://heyimrenalt.github.io/xplorejogja-web/destinasi/kali-kuning-208/ulasan" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="podeUpYIwnq5v0c7xbyVZ4fZEBZKRdoeDZh9Fdnq">                    
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-600 mb-2">Nama</label>
+                        <input type="text" name="nama" value=""
+                               class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                               placeholder="Nama kamu">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-600 mb-2">Rating</label>
+                        <div class="flex gap-2" id="star-container">
+                                                        <i class="fas fa-star text-3xl text-gray-300 cursor-pointer star-btn" data-val="1"></i>
+                                                        <i class="fas fa-star text-3xl text-gray-300 cursor-pointer star-btn" data-val="2"></i>
+                                                        <i class="fas fa-star text-3xl text-gray-300 cursor-pointer star-btn" data-val="3"></i>
+                                                        <i class="fas fa-star text-3xl text-gray-300 cursor-pointer star-btn" data-val="4"></i>
+                                                        <i class="fas fa-star text-3xl text-gray-300 cursor-pointer star-btn" data-val="5"></i>
+                                                    </div>
+                        <input type="hidden" name="rating" id="rating-input" value="">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-600 mb-2">Ulasan</label>
+                        <textarea name="teks" rows="4"
+                                  class="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 resize-none"
+                                  placeholder="Ceritakan pengalamanmu..."></textarea>
+                    </div>
+
+                    <div class='mb-6'>
+                        <label class='block text-sm text-gray-600 mb-2'>Foto (opsional, maks 3 foto)</label>
+                        <div class='flex gap-3'>
+                                                        <div style='position: relative; width: 80px; height: 80px;'>
+                                <label for='foto-input-1'
+                                       style='width:80px; height:80px; border: 1px dashed #d1d5db; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;'
+                                       id='label-container-1'>
+                                    <img id='preview-foto-1'
+                                         src=''
+                                         style='display:none; width:100%; height:100%; object-fit:cover; border-radius:12px;'>
+                                    <div id='placeholder-foto-1' style='display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;'>
+                                        <i class='fas fa-plus text-gray-400 text-lg'></i>
+                                        <span style='font-size:10px; color:#9ca3af;'>Foto 1</span>
+                                    </div>
+                                </label>
+                                <input type='file'
+                                       id='foto-input-1'
+                                       name='foto1'
+                                       accept='image/jpeg,image/png,image/jpg,image/heic,image/heif,.heic,.heif'
+                                       style='display:none;'
+                                       onchange='previewFoto(this, 1)'>
+                            </div>
+                                                        <div style='position: relative; width: 80px; height: 80px;'>
+                                <label for='foto-input-2'
+                                       style='width:80px; height:80px; border: 1px dashed #d1d5db; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;'
+                                       id='label-container-2'>
+                                    <img id='preview-foto-2'
+                                         src=''
+                                         style='display:none; width:100%; height:100%; object-fit:cover; border-radius:12px;'>
+                                    <div id='placeholder-foto-2' style='display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;'>
+                                        <i class='fas fa-plus text-gray-400 text-lg'></i>
+                                        <span style='font-size:10px; color:#9ca3af;'>Foto 2</span>
+                                    </div>
+                                </label>
+                                <input type='file'
+                                       id='foto-input-2'
+                                       name='foto2'
+                                       accept='image/jpeg,image/png,image/jpg,image/heic,image/heif,.heic,.heif'
+                                       style='display:none;'
+                                       onchange='previewFoto(this, 2)'>
+                            </div>
+                                                        <div style='position: relative; width: 80px; height: 80px;'>
+                                <label for='foto-input-3'
+                                       style='width:80px; height:80px; border: 1px dashed #d1d5db; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;'
+                                       id='label-container-3'>
+                                    <img id='preview-foto-3'
+                                         src=''
+                                         style='display:none; width:100%; height:100%; object-fit:cover; border-radius:12px;'>
+                                    <div id='placeholder-foto-3' style='display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;'>
+                                        <i class='fas fa-plus text-gray-400 text-lg'></i>
+                                        <span style='font-size:10px; color:#9ca3af;'>Foto 3</span>
+                                    </div>
+                                </label>
+                                <input type='file'
+                                       id='foto-input-3'
+                                       name='foto3'
+                                       accept='image/jpeg,image/png,image/jpg,image/heic,image/heif,.heic,.heif'
+                                       style='display:none;'
+                                       onchange='previewFoto(this, 3)'>
+                            </div>
+                                                    </div>
+                        <p style='font-size:11px; color:#9ca3af; margin-top:6px;'>Format: JPG, PNG, HEIC. Maks 10MB per foto.</p>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-xl text-sm transition">
+                        Kirim Ulasan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+<footer class="bg-cyan-700 text-white pt-12 pb-6">
+    <div class="container mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 border-b border-cyan-600 pb-10">
+        <div>
+            <h3 class="text-2xl font-bold mb-4">XPloreJogja</h3>
+            <p class="text-sm leading-relaxed opacity-90">Tentukan Panduan Lengkap untuk merencanakan liburan tak terlupakan di Yogyakarta.</p>
+            <p class="text-sm mt-4 italic">Informasi selengkapnya, silahkan jelajahi peta situs website xplorejogja disini.</p>
+        </div>
+        <div>
+            <h4 class="font-bold mb-4">Kategori</h4>
+            <ul class="text-sm space-y-2 opacity-90">
+                <li><a href="https://heyimrenalt.github.io/xplorejogja-web/wisata-alam"    class="hover:underline flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i>Wisata Alam</a></li>
+                <li><a href="https://heyimrenalt.github.io/xplorejogja-web/hiburan-kel"    class="hover:underline flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i>Hiburan Keluarga</a></li>
+                <li><a href="https://heyimrenalt.github.io/xplorejogja-web/penginapan"     class="hover:underline flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i>Penginapan</a></li>
+                <li><a href="https://heyimrenalt.github.io/xplorejogja-web/transportasi"   class="hover:underline flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i>Transportasi</a></li>
+                <li><a href="https://heyimrenalt.github.io/xplorejogja-web/kuliner"        class="hover:underline flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i>Kuliner</a></li>
+                <li><a href="https://heyimrenalt.github.io/xplorejogja-web/blog-informasi" class="hover:underline flex items-center gap-2"><i class="fas fa-chevron-right text-[10px]"></i>Blog & Informasi</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-bold mb-4">Sosial Media</h4>
+            <div class="flex gap-4 text-xl">
+                <a href="https://www.instagram.com/xplorejogjaku" target="_blank" rel="noopener noreferrer" class="hover:text-pink-500 transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="https://web.facebook.com/xplorejogjaku/" target="_blank" rel="noopener noreferrer" class="hover:text-blue-300 transition-colors"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.tiktok.com/@xplorejogjaku" target="_blank" rel="noopener noreferrer" class="hover:text-black transition-colors"><i class="fab fa-tiktok"></i></a>
+                <a href="https://pin.it/5jLBj5XRd" target="_blank" rel="noopener noreferrer" class="hover:text-red-500 transition-colors"><i class="fab fa-pinterest"></i></a>
+            </div>
+        </div>
+    </div>
+    <p class="text-center text-xs mt-6 opacity-70">© 2026 XPloreJogja.com - All Rights Reserved</p>
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.myHeroSwiper', {
+            loop: true,
+            autoplay: { delay: 5000 },
+            pagination: { el: '.swiper-pagination', clickable: true },
+        });
+    </script>
+    <script>
+// Sumber hasil pencarian: pakai index statis bila tersedia (GitHub Pages),
+// selain itu pakai API dinamis /api/search (lokal / server PHP).
+window.__xploreSearch = function (keyword) {
+    if (window.__XPLORE_SEARCH_URL__) {
+        if (!window.__xploreIndexPromise) {
+            window.__xploreIndexPromise = fetch(window.__XPLORE_SEARCH_URL__).then(r => r.json());
+        }
+        const kw = keyword.toLowerCase();
+        return window.__xploreIndexPromise.then(list =>
+            list.filter(it => (it.nama || '').toLowerCase().includes(kw)).slice(0, 10)
+        );
+    }
+    return fetch(`/api/search?q=${encodeURIComponent(keyword)}`).then(r => r.json());
+};
+
+(function () {
+    const inputSearch  = document.getElementById('inputSearch');
+    const hasilSearch  = document.getElementById('hasilSearch');
+    if (!inputSearch || !hasilSearch) return;
+
+    const detailBase   = "https://heyimrenalt.github.io/xplorejogja-web/destinasi/__SLUG__";
+    let   debounceTimer = null;
+
+    function showLoading() {
+        hasilSearch.innerHTML = `
+            <div class="flex items-center gap-3 px-4 py-3 text-sm text-gray-400">
+                <svg class="animate-spin h-4 w-4 text-cyan-500 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Mencari...
+            </div>`;
+        hasilSearch.classList.remove('hidden');
+    }
+
+    function renderResults(items, keyword) {
+        hasilSearch.innerHTML = '';
+        if (items.length === 0) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'px-4 py-3 text-sm text-gray-500 italic';
+            msgDiv.textContent = `Destinasi "${keyword}" tidak ditemukan...`;
+            hasilSearch.appendChild(msgDiv);
+        } else {
+            items.forEach(item => {
+                const isBlog = item.parent_id == 27;
+                const href   = isBlog && item.link_nav ? item.link_nav : detailBase.replace('__SLUG__', item.slug);
+                const thumb  = item.gambar
+                    ? `<img src="${item.gambar}" class="w-10 h-10 rounded-lg object-cover shrink-0" loading="lazy">`
+                    : `<div class="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center shrink-0"><i class="fas fa-image text-cyan-300 text-xs"></i></div>`;
+
+                const a = document.createElement('a');
+                a.href = href;
+                a.className = 'flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 border-b last:border-0 transition-colors';
+                if (isBlog) { a.target = '_blank'; a.rel = 'noopener'; }
+
+                const thumbEl = document.createElement('div');
+                thumbEl.innerHTML = thumb;
+                a.appendChild(thumbEl.firstElementChild);
+
+                const info = document.createElement('div');
+                info.className = 'min-w-0';
+
+                const pNama = document.createElement('p');
+                pNama.className = 'text-sm font-semibold text-cyan-800 truncate';
+                pNama.textContent = item.nama;
+
+                const pKat = document.createElement('p');
+                pKat.className = 'text-xs text-gray-400';
+                pKat.textContent = item.kategori;
+
+                info.appendChild(pNama);
+                info.appendChild(pKat);
+                a.appendChild(info);
+
+                const div = document.createElement('div');
+                div.appendChild(a);
+                hasilSearch.appendChild(div);
+            });
+        }
+        hasilSearch.classList.remove('hidden');
+    }
+
+    inputSearch.addEventListener('input', (e) => {
+        const keyword = e.target.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (keyword.length < 2) {
+            hasilSearch.classList.add('hidden');
+            hasilSearch.innerHTML = '';
+            return;
+        }
+
+        showLoading();
+
+        debounceTimer = setTimeout(() => {
+            window.__xploreSearch(keyword)
+                .then(data => renderResults(data, keyword))
+                .catch(() => {
+                    hasilSearch.innerHTML = `<div class="px-4 py-3 text-sm text-red-400 italic">Gagal memuat hasil. Coba lagi.</div>`;
+                });
+        }, 300);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!inputSearch.contains(e.target) && !hasilSearch.contains(e.target)) {
+            hasilSearch.classList.add('hidden');
+        }
+    });
+})();
+
+(function () {
+    const inputSearchMobile = document.getElementById('inputSearchMobile');
+    const hasilSearchMobile = document.getElementById('hasilSearchMobile');
+    if (!inputSearchMobile || !hasilSearchMobile) return;
+
+    const detailBase    = "https://heyimrenalt.github.io/xplorejogja-web/destinasi/__SLUG__";
+    let   debounceTimer = null;
+
+    function showLoading() {
+        hasilSearchMobile.innerHTML = `
+            <div class="flex items-center gap-3 px-4 py-3 text-sm text-gray-400">
+                <svg class="animate-spin h-4 w-4 text-cyan-500 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Mencari...
+            </div>`;
+        hasilSearchMobile.classList.remove('hidden');
+    }
+
+    function renderResults(items, keyword) {
+        hasilSearchMobile.innerHTML = '';
+        if (items.length === 0) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'px-4 py-3 text-sm text-gray-500 italic';
+            msgDiv.textContent = `Destinasi "${keyword}" tidak ditemukan...`;
+            hasilSearchMobile.appendChild(msgDiv);
+        } else {
+            items.forEach(item => {
+                const isBlog = item.parent_id == 27;
+                const href   = isBlog && item.link_nav ? item.link_nav : detailBase.replace('__SLUG__', item.slug);
+                const thumb  = item.gambar
+                    ? `<img src="${item.gambar}" class="w-10 h-10 rounded-lg object-cover shrink-0" loading="lazy">`
+                    : `<div class="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center shrink-0"><i class="fas fa-image text-cyan-300 text-xs"></i></div>`;
+
+                const a = document.createElement('a');
+                a.href = href;
+                a.className = 'flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 border-b last:border-0 transition-colors';
+                if (isBlog) { a.target = '_blank'; a.rel = 'noopener'; }
+
+                const thumbEl = document.createElement('div');
+                thumbEl.innerHTML = thumb;
+                a.appendChild(thumbEl.firstElementChild);
+
+                const info = document.createElement('div');
+                info.className = 'min-w-0';
+
+                const pNama = document.createElement('p');
+                pNama.className = 'text-sm font-semibold text-cyan-800 truncate';
+                pNama.textContent = item.nama;
+
+                const pKat = document.createElement('p');
+                pKat.className = 'text-xs text-gray-400';
+                pKat.textContent = item.kategori;
+
+                info.appendChild(pNama);
+                info.appendChild(pKat);
+                a.appendChild(info);
+
+                const div = document.createElement('div');
+                div.appendChild(a);
+                hasilSearchMobile.appendChild(div);
+            });
+        }
+        hasilSearchMobile.classList.remove('hidden');
+    }
+
+    inputSearchMobile.addEventListener('input', (e) => {
+        const keyword = e.target.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (keyword.length < 2) {
+            hasilSearchMobile.classList.add('hidden');
+            hasilSearchMobile.innerHTML = '';
+            return;
+        }
+
+        showLoading();
+
+        debounceTimer = setTimeout(() => {
+            window.__xploreSearch(keyword)
+                .then(data => renderResults(data, keyword))
+                .catch(() => {
+                    hasilSearchMobile.innerHTML = `<div class="px-4 py-3 text-sm text-red-400 italic">Gagal memuat hasil. Coba lagi.</div>`;
+                });
+        }, 300);
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!inputSearchMobile.contains(e.target) && !hasilSearchMobile.contains(e.target)) {
+            hasilSearchMobile.classList.add('hidden');
+        }
+    });
+})();
+</script>
+    <script>
+    // Star rating
+    var stars = document.querySelectorAll('.star-btn');
+    var ratingInput = document.getElementById('rating-input');
+    var currentRating = parseInt(ratingInput ? ratingInput.value : 0) || 0;
+
+    function updateStars(val) {
+        stars.forEach(function(s, idx) {
+            s.style.color = idx < val ? '#fbbf24' : '#d1d5db';
+        });
+    }
+    updateStars(currentRating);
+
+    stars.forEach(function(s) {
+        s.addEventListener('click', function() {
+            currentRating = parseInt(this.getAttribute('data-val'));
+            ratingInput.value = currentRating;
+            updateStars(currentRating);
+        });
+        s.addEventListener('mouseover', function() {
+            updateStars(parseInt(this.getAttribute('data-val')));
+        });
+        s.addEventListener('mouseout', function() {
+            updateStars(currentRating);
+        });
+    });
+
+    function previewFoto(input, n) {
+        var file = input.files && input.files[0];
+        if (!file) return;
+
+        var ext  = file.name.split('.').pop().toLowerCase();
+        var mime = file.type.toLowerCase();
+        var isHeic = ext === 'heic' || ext === 'heif'
+                  || mime === 'image/heic' || mime === 'image/heif';
+
+        if (isHeic && typeof heic2any !== 'undefined') {
+            var placeholder = document.getElementById('placeholder-foto-' + n);
+            if (placeholder) {
+                placeholder.innerHTML = '<span style="font-size:9px;color:#6b7280;text-align:center;line-height:1.3;">Mengonversi<br>HEIC...</span>';
+            }
+            heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 })
+                .then(function(jpgBlob) {
+                    var baseName = file.name.replace(/\.(heic|heif)$/i, '');
+                    var jpgFile  = new File([jpgBlob], baseName + '.jpg', { type: 'image/jpeg' });
+                    try {
+                        var dt = new DataTransfer();
+                        dt.items.add(jpgFile);
+                        input.files = dt.files;
+                    } catch (e) { /* DataTransfer tidak didukung, preview tetap jalan */ }
+                    var reader = new FileReader();
+                    reader.onload = function(ev) {
+                        var preview = document.getElementById('preview-foto-' + n);
+                        if (preview) { preview.src = ev.target.result; preview.style.display = 'block'; }
+                        if (placeholder) { placeholder.style.display = 'none'; }
+                    };
+                    reader.readAsDataURL(jpgFile);
+                })
+                .catch(function() {
+                    input.value = '';
+                    var placeholder = document.getElementById('placeholder-foto-' + n);
+                    if (placeholder) {
+                        placeholder.innerHTML = '<i class="fas fa-plus text-gray-400 text-lg"></i>'
+                            + '<span style="font-size:9px;color:#ef4444;text-align:center;">Gagal.<br>Coba JPG/PNG</span>';
+                    }
+                });
+        } else {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var label = document.getElementById('preview-foto-' + n);
+                var placeholder = document.getElementById('placeholder-foto-' + n);
+                if (label) { label.src = e.target.result; label.style.display = 'block'; }
+                if (placeholder) { placeholder.style.display = 'none'; }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    var currentOffset = 5;
+    function loadMoreUlasan() {
+        var btn = document.getElementById('btn-load-more');
+        btn.textContent = 'Memuat...';
+        btn.disabled = true;
+        fetch('https://heyimrenalt.github.io/xplorejogja-web/destinasi/kali-kuning-208/ulasan?offset=' + currentOffset)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var container = document.getElementById('daftar-ulasan');
+                container.insertAdjacentHTML('beforeend', data.html);
+                currentOffset += 10;
+                if (data.hasMore) {
+                    btn.textContent = 'Lihat ulasan berikutnya';
+                    btn.disabled = false;
+                } else {
+                    btn.style.display = 'none';
+                }
+            })
+            .catch(function() {
+                btn.textContent = 'Gagal memuat. Coba lagi';
+                btn.disabled = false;
+            });
+    }
+    </script>
+<script>
+window.__XPLORE_STATIC__ = true;
+window.__XPLORE_SEARCH_URL__ = "https://heyimrenalt.github.io/xplorejogja-web/search-index.json";
+document.addEventListener('DOMContentLoaded', function () {
+    // Sembunyikan tombol "muat lebih banyak" ulasan (butuh backend)
+    var lm = document.getElementById('btn-load-more');
+    if (lm) lm.style.display = 'none';
+    // Nonaktifkan form kirim ulasan (versi statis read-only)
+    document.querySelectorAll('form[action*="/ulasan"]').forEach(function (f) {
+        f.addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Pengiriman ulasan dinonaktifkan pada versi ini.');
+        });
+    });
+});
+</script></body>
+</html>
