@@ -59,7 +59,7 @@
                         'Blog & Informasi' => '/blog-informasi',
                     ];
 
-                    $catId = (int) $wisata->category_id;
+                    $catId = (int) (optional($wisata ?? null)->category_id ?? 0);
                     $current_parent = 'Wisata Alam';
                     foreach ($all_categories as $parent => $subs) {
                         if (array_key_exists($catId, $subs)) {
@@ -74,7 +74,7 @@
                 @foreach($display_list as $id => $name)
                     <a href="{{ route('sub-kategori', $id) }}"
                        class="block px-4 py-2 transition-colors duration-200
-                       {{ $wisata->category_id == $id
+                       {{ optional($wisata ?? null)->category_id == $id
                           ? 'bg-cyan-600 text-white hover:bg-cyan-50 hover:text-cyan-600'
                           : 'hover:bg-cyan-50 hover:text-cyan-600 text-gray-700' }}">
                        {{ $name }}

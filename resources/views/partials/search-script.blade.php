@@ -1,4 +1,19 @@
 <script>
+// Sumber hasil pencarian: pakai index statis bila tersedia (GitHub Pages),
+// selain itu pakai API dinamis /api/search (lokal / server PHP).
+window.__xploreSearch = function (keyword) {
+    if (window.__XPLORE_SEARCH_URL__) {
+        if (!window.__xploreIndexPromise) {
+            window.__xploreIndexPromise = fetch(window.__XPLORE_SEARCH_URL__).then(r => r.json());
+        }
+        const kw = keyword.toLowerCase();
+        return window.__xploreIndexPromise.then(list =>
+            list.filter(it => (it.nama || '').toLowerCase().includes(kw)).slice(0, 10)
+        );
+    }
+    return fetch(`/api/search?q=${encodeURIComponent(keyword)}`).then(r => r.json());
+};
+
 (function () {
     const inputSearch  = document.getElementById('inputSearch');
     const hasilSearch  = document.getElementById('hasilSearch');
@@ -79,8 +94,7 @@
         showLoading();
 
         debounceTimer = setTimeout(() => {
-            fetch(`/api/search?q=${encodeURIComponent(keyword)}`)
-                .then(r => r.json())
+            window.__xploreSearch(keyword)
                 .then(data => renderResults(data, keyword))
                 .catch(() => {
                     hasilSearch.innerHTML = `<div class="px-4 py-3 text-sm text-red-400 italic">Gagal memuat hasil. Coba lagi.</div>`;
@@ -175,8 +189,7 @@
         showLoading();
 
         debounceTimer = setTimeout(() => {
-            fetch(`/api/search?q=${encodeURIComponent(keyword)}`)
-                .then(r => r.json())
+            window.__xploreSearch(keyword)
                 .then(data => renderResults(data, keyword))
                 .catch(() => {
                     hasilSearchMobile.innerHTML = `<div class="px-4 py-3 text-sm text-red-400 italic">Gagal memuat hasil. Coba lagi.</div>`;

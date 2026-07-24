@@ -20,3 +20,6 @@ AUDIT_REPORT.md
 PERFORMANCE_AUDIT.md
 *.sql
 struktur-project.txt
+
+/dist
+/.claude
